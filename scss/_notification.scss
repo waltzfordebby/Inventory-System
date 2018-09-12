@@ -1,0 +1,32 @@
+body {
+  .notification-container {
+    height: 100vh;
+    width: 100vw;
+    z-index: 999;
+    display: none;
+    opacity: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    @include point-twenty-transition();
+
+    .notification-content {
+      font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+
+      &.error {
+        background: $danger-color;
+      }
+
+      &.success {
+        background: $success-color;
+      }
+
+      span {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

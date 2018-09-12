@@ -1,0 +1,16 @@
+body {
+  main {
+    &.default-container {
+      min-height: calc(100vh - 1.5rem);
+      display: grid;
+      grid-template-columns: 1fr repeat(2, minmax(auto, 25rem)) 1fr;
+      grid-gap: 1rem;
+      background: $secondary-bg-color;
+
+      .default-content {
+        grid-column: 2/4;
+        margin: 3rem 0 2rem 0;
+      }
+    }
+  }
+}

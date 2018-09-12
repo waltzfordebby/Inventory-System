@@ -1,0 +1,104 @@
+body {
+  header {
+    &.dashboard-navigation {
+      background: $primary-bg-color;
+
+      .logo-navigation-container {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        .logo {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        nav {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+
+          ul {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 0.5rem;
+            list-style: none;
+
+            li {
+              i {
+                margin-right: 0.3rem;
+              }
+              span {
+                font-weight: bold;
+              }
+
+              &:nth-child(2) {
+                cursor: pointer;
+              }
+            }
+          }
+
+          aside {
+            position: absolute;
+            z-index: 3;
+            margin-top: 3rem;
+            margin-left: -2.6rem;
+            height: 5rem;
+            width: 10rem;
+            visibility: hidden;
+            opacity: 0;
+            @include point-twenty-transition();
+
+            &.show {
+              visibility: visible;
+              opacity: 1;
+            }
+
+            span {
+              margin-left: 7.8rem;
+              color: $secondary-bg-color;
+            }
+
+            ul {
+              background: $secondary-bg-color;
+              margin-top: -1rem;
+              display: grid;
+              grid-template-columns: 1fr;
+              border-radius: 0.5rem;
+              @include box-shadow();
+
+              li {
+                padding: 0.5rem;
+                cursor: pointer;
+                border-bottom: 1px solid #343434;
+                text-align: center;
+                font-weight: bold;
+                @include point-twenty-transition();
+
+                &:first-child {
+                  border-top-left-radius: 0.5rem;
+                  border-top-right-radius: 0.5rem;
+                }
+
+                &:last-child {
+                  border-bottom-left-radius: 0.5rem;
+                  border-bottom-right-radius: 0.5rem;
+                  border-bottom: none;
+                }
+
+                &:hover {
+                  background: $primary-bg-color;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

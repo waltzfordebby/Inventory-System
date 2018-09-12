@@ -1,0 +1,60 @@
+// Fonts
+@font-face {
+  font-family: "PTSans";
+  src: url(../fonts/PT_Sans/PT_Sans-Web-Regular.ttf);
+}
+
+$primary-font: "PTSans";
+
+//Colors
+$primary-bg-color: #7678ed;
+$secondary-bg-color: #b2ece1;
+$warning-color: #acc12f;
+$success-color: #4392f1;
+$danger-color: #e4572e;
+
+//Box Shadows
+@mixin box-shadow {
+  -webkit-box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+  box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+}
+
+// Transforms
+@mixin make-bigger {
+  -webkit-transfrom: scale(1.1);
+  -moz-transfrom: scale(1.1);
+  transform: scale(1.1);
+}
+
+//Transitions
+@mixin point-twenty-transition {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+// Media Query Mixins
+@mixin mediaSm {
+  @media screen and (max-width: 500px) {
+    @content;
+  }
+}
+
+@mixin mediaMd {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mediaLg {
+  @media screen and (min-width: 769px) and (max-width: 1170px) {
+    @content;
+  }
+}
+
+@mixin mediaXl {
+  @media screen and (min-width: 1171px) {
+    @content;
+  }
+}
