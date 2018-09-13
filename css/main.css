@@ -429,7 +429,7 @@ body .modal-container .modal.create-user .modal-content .create-user-container .
 }
 body .modal-container .modal.edit-account {
   height: 25rem;
-  width: 31rem;
+  width: 38rem;
 }
 body .modal-container .modal.edit-account .modal-content {
   display: grid;
@@ -492,7 +492,7 @@ body .modal-container .modal.edit-account .modal-content .edit-account-container
   transition: all 0.2s ease-in-out;
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields input {
-  padding: 0.4rem 0;
+  padding: 0.4rem 1.8rem;
   font-size: 1.1rem;
   text-align: center;
   border-radius: 0.3rem;
@@ -504,6 +504,15 @@ body .modal-container .modal.edit-account .modal-content .edit-account-container
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+}
+body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container input {
+  position: relative;
+}
+body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container span i {
+  position: fixed;
+  margin-top: -1.5rem;
+  margin-left: 16rem;
+  cursor: pointer;
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-submit-button {
   display: flex;

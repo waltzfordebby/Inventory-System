@@ -54,17 +54,20 @@ function editAccount() {
                  <h1><i class="fas fa-user-cog"></i> Edit Account</h1>
              </div>
              <div class="edit-account-input-fields">
-                 <label for="">Change</label>
-                 <select name="" id="">
+                 <label>Change</label>
+                 <select onchange="changeSelect()">
                      <option value="username">Username</option>
                      <option value="password">Password</option>
                  </select>
-                 <label for="">Old username</label>
+                 <label>Old username</label>
                  <input type="text">
-                 <label for="">New Username</label>
+                 <label>New Username</label>
                  <input type="text">
-                 <label for="">Password</label>
-                 <input type="password">
+                 <label>Password</label>
+                 <div class="password-container">
+                  <input type="password">
+                  <span onclick="showPassword()"><i class="fas fa-eye"></i></span>
+                </div>
              </div>
              <div class="edit-account-submit-button">
                  <button>Submit</button>
@@ -78,6 +81,86 @@ function editAccount() {
   addModalOpacity();
 }
 
+function changeSelect() {
+  let editAccountModal = document.querySelector(".edit-account");
+  let changeSelectContainer = document.querySelector(
+    ".edit-account-input-fields select"
+  );
+  let editAccountInputFields = document.querySelector(
+    ".edit-account-input-fields"
+  );
+
+  if (changeSelectContainer.value == "password") {
+    editAccountModal.style.height = "28rem";
+    editAccountInputFields.innerHTML = `
+    <label>Change</label>
+      <select onchange="changeSelect()">
+        <option value="password">Password</option>
+        <option value="username">Username</option>
+      </select>
+    <label>Username</label>
+    <input type="text">
+    <label>Old Password</label>
+    <div class="password-container">
+      <input type="password">
+      <span onclick="showPassword()"><i class="fas fa-eye"></i></span>
+    </div>
+    <label>New Password</label>
+    <div class="password-container">
+      <input type="password">
+      <span onclick="showPassword()"><i class="fas fa-eye"></i></span>
+    </div>
+    <label>Confirm Password</label>
+    <div class="password-container">
+      <input type="password">
+      <span onclick="showPassword()"><i class="fas fa-eye"></i></span>
+    </div>
+    `;
+  } else {
+    editAccountModal.style.height = "25rem";
+    editAccountInputFields.innerHTML = `
+    <label>Change</label>
+     <select onchange="changeSelect()">
+      <option value="username">Username</option>
+      <option value="password">Password</option>
+     </select>
+     <label>Old username</label>
+     <input type="text">
+     <label>New Username</label>
+     <input type="text">
+     <label>Password</label>
+     <div class="password-container">
+      <input type="password">
+      <span onclick="showPassword()"><i class="fas fa-eye"></i></span>
+    </div>
+    `;
+  }
+}
+
+// Show password
+function showPassword(position) {
+  let passwordInputFields = document.querySelectorAll(
+    ".password-container input"
+  );
+  let viewPasswordButtons = document.querySelectorAll(
+    ".password-container span"
+  );
+
+  viewPasswordButtons.forEach((button, index) => {
+    if (button != event.path[1]) {
+      return;
+    }
+    if (button.innerHTML == '<i class="fas fa-eye"></i>') {
+      button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+      passwordInputFields[index].setAttribute("type", "text");
+    } else if (button.innerHTML == '<i class="fas fa-eye-slash"></i>') {
+      button.innerHTML = '<i class="fas fa-eye"></i>';
+      passwordInputFields[index].setAttribute("type", "password");
+    }
+  });
+}
+
+// Logout
 function logOut() {
   navigationMenus.classList.remove("show");
   console.log("Logout");

@@ -136,7 +136,7 @@ body {
 
       &.edit-account {
         height: 25rem;
-        width: 31rem;
+        width: 38rem;
 
         .modal-content {
           display: grid;
@@ -203,7 +203,7 @@ body {
                 }
 
                 input {
-                  padding: 0.4rem 0;
+                  padding: 0.4rem 1.8rem;
                   font-size: 1.1rem;
                   text-align: center;
                   border-radius: 0.3rem;
@@ -213,6 +213,21 @@ body {
                   &:focus {
                     border: 2px solid #364156;
                     @include point-twenty-transition();
+                  }
+                }
+
+                .password-container {
+                  input {
+                    position: relative;
+                  }
+
+                  span {
+                    i {
+                      position: fixed;
+                      margin-top: -1.5rem;
+                      margin-left: 16rem;
+                      cursor: pointer;
+                    }
                   }
                 }
               }
