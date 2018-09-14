@@ -3,6 +3,7 @@ const body = document.querySelector("body");
 const showMenuButton = document.querySelector(".fa-caret-down");
 const navigationMenus = document.querySelector("nav aside");
 const navigationMenusList = document.querySelectorAll("nav aside ul li");
+const header = document.querySelector("header");
 const main = document.querySelector("main");
 const dashboardMenus = document.querySelectorAll(
   ".dashboard-menus-container div"
@@ -39,6 +40,7 @@ navigationMenusList.forEach((menu, index) => {
 
 // Edit account
 function editAccount() {
+  addOpacityOnHeaderMainFooter();
   navigationMenus.classList.remove("show");
   let editAccountModal = document.createElement("section");
   editAccountModal.setAttribute("class", "modal-container");
@@ -76,11 +78,12 @@ function editAccount() {
      </div>
  </div>
 </div>`;
-  body.insertBefore(editAccountModal, main);
+  body.insertBefore(editAccountModal, header);
   editAccountModal.style.display = "flex";
   addModalOpacity();
 }
 
+// Function for changing change field in edit account
 function changeSelect() {
   let editAccountModal = document.querySelector(".edit-account");
   let changeSelectContainer = document.querySelector(
@@ -138,7 +141,7 @@ function changeSelect() {
 }
 
 // Show password
-function showPassword(position) {
+function showPassword() {
   let passwordInputFields = document.querySelectorAll(
     ".password-container input"
   );
@@ -147,6 +150,7 @@ function showPassword(position) {
   );
 
   viewPasswordButtons.forEach((button, index) => {
+    //If event path is not equal to view password button return or stop the loop
     if (button != event.path[1]) {
       return;
     }
@@ -177,6 +181,7 @@ dashboardMenus.forEach((menu, index) => {
 
 // Show create user modal
 function createUser() {
+  addOpacityOnHeaderMainFooter();
   let createUserModal = document.createElement("section");
   createUserModal.setAttribute("class", "modal-container");
   createUserModal.innerHTML = `<div class="modal create-user">
@@ -221,7 +226,7 @@ function createUser() {
       </div>
   </div>
 </div>`;
-  body.insertBefore(createUserModal, main);
+  body.insertBefore(createUserModal, header);
   createUserModal.style.display = "flex";
   addModalOpacity();
 }
@@ -252,6 +257,7 @@ function closeModal() {
 
 //Remove modal element
 function removeModalElement() {
+  removeOpacityOnHeaderMainFooter();
   setTimeout(() => {
     let modal = document.querySelector(".modal-container");
     document.body.removeChild(modal);
@@ -260,4 +266,18 @@ function removeModalElement() {
 
 function userList() {
   window.location.replace("user-list.html");
+}
+
+// Function for adding opacity to header, main and footer
+function addOpacityOnHeaderMainFooter() {
+  header.style.opacity = 0.5;
+  main.style.opacity = 0.5;
+  footer.style.opacity = 0.5;
+}
+
+// Function for removing opacity to header, main and footer
+function removeOpacityOnHeaderMainFooter() {
+  header.style.opacity = 1;
+  main.style.opacity = 1;
+  footer.style.opacity = 1;
 }

@@ -5,6 +5,7 @@ body {
     }
   }
   footer {
+    @include point-twenty-transition();
     width: 100vw;
     background: $primary-bg-color;
     text-align: center;

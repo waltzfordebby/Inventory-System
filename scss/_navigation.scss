@@ -1,6 +1,7 @@
 body {
   header {
     &.dashboard-navigation {
+      @include point-twenty-transition();
       background: $primary-bg-color;
 
       .logo-navigation-container {

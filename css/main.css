@@ -125,6 +125,9 @@ body.system-login footer {
 }
 
 body header.dashboard-navigation {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   background: #7678ed;
 }
 body header.dashboard-navigation .logo-navigation-container {
@@ -216,6 +219,9 @@ body header.dashboard-navigation .logo-navigation-container nav aside ul li:hove
 }
 
 body main.dashboard {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   min-height: calc(100vh - 1.5rem);
   display: flex;
   flex-direction: row;
@@ -300,7 +306,7 @@ body .notification-container .notification-content span {
 body .modal-container {
   height: 100vh;
   width: 100vw;
-  z-index: 998;
+  z-index: 999;
   display: none;
   opacity: 0;
   flex-direction: row;
@@ -354,15 +360,17 @@ body .modal-container .modal.create-user .modal-content .create-user-container {
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr repeat(2, minmax(auto, 14rem)) 1fr;
   grid-row-gap: 1.5rem;
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-title {
+  grid-column: 2/4;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-input-fields {
+  grid-column: 2/4;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-row-gap: 0.7rem;
@@ -385,7 +393,7 @@ body .modal-container .modal.create-user .modal-content .create-user-container .
   transition: all 0.2s ease-in-out;
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-input-fields input {
-  padding: 0.4rem 0;
+  padding: 0.4rem 0.5rem;
   font-size: 1.1rem;
   text-align: center;
   border-radius: 0.3rem;
@@ -399,12 +407,13 @@ body .modal-container .modal.create-user .modal-content .create-user-container .
   transition: all 0.2s ease-in-out;
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-input-fields input[type=date] {
-  padding: 0.3rem 0.5rem;
+  padding: 0.4rem 0.5rem;
   font-size: 1.1rem;
   text-align: left;
   font-weight: bold;
 }
 body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-submit-button {
+  grid-column: 2/4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -429,7 +438,7 @@ body .modal-container .modal.create-user .modal-content .create-user-container .
 }
 body .modal-container .modal.edit-account {
   height: 25rem;
-  width: 38rem;
+  width: 33rem;
 }
 body .modal-container .modal.edit-account .modal-content {
   display: grid;
@@ -461,15 +470,17 @@ body .modal-container .modal.edit-account .modal-content .edit-account-container
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr repeat(2, minmax(auto, 14rem)) 1fr;
   grid-row-gap: 1.5rem;
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-title {
+  grid-column: 2/4;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields {
+  grid-column: 2/4;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-row-gap: 0.7rem;
@@ -515,6 +526,7 @@ body .modal-container .modal.edit-account .modal-content .edit-account-container
   cursor: pointer;
 }
 body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-submit-button {
+  grid-column: 2/4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -615,6 +627,9 @@ body.system-login footer {
   background: none;
 }
 body footer {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   width: 100vw;
   background: #7678ed;
   text-align: center;
