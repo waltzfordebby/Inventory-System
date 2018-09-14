@@ -21,12 +21,13 @@ body {
         min-width: 98%;
         padding: 0.6rem;
         text-align: center;
+        font-size: 1.1rem;
         outline: none;
-        border: 2px solid red;
+        border: 2px solid #136f63;
         background: url(../images/icons8-search-filled-30.png) no-repeat center;
 
         &:focus {
-          border: 2px solid #020202;
+          border: 2px solid #364156;
           @include point-twenty-transition();
         }
       }
@@ -41,9 +42,13 @@ body {
           tr {
             th {
               text-align: center;
-              padding: 0 0.5rem;
+              padding: 0rem 0.5rem;
               border-bottom: 2px solid black;
               border-right: 2px solid black;
+
+              &:nth-child(6) {
+                padding: 0rem 1rem 0rem 1rem;
+              }
 
               &:last-child {
                 border-right: none;
@@ -56,8 +61,13 @@ body {
               border-bottom: 2px solid black;
               border-right: 2px solid black;
 
+              &:nth-child(6) {
+                cursor: pointer;
+              }
+
               &:last-child {
                 border-right: none;
+                cursor: pointer;
               }
             }
           }
@@ -85,6 +95,17 @@ body {
           border: 2px solid black;
           border-radius: 0.5rem;
           font-weight: bold;
+          outline: none;
+
+          &:hover {
+            background: #0b4f6c;
+            @include point-twenty-transition();
+          }
+
+          &:focus {
+            background: #0b4f6c;
+            @include point-twenty-transition();
+          }
         }
       }
     }
