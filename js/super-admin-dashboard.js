@@ -9,10 +9,10 @@ const dashboardMenus = document.querySelectorAll(
   ".dashboard-menus-container div"
 );
 
-// Show menu button
+// Show  navigation menu button
 showMenuButton.addEventListener("click", showMenus);
 
-//Show menu function
+//Show navigation menu function
 function showMenus() {
   navigationMenus.classList.toggle("show");
 }
@@ -32,14 +32,14 @@ document.addEventListener("click", event => {
 // Navigation menu list menu
 navigationMenusList.forEach((menu, index) => {
   if (index == 0) {
-    menu.addEventListener("click", editAccount);
+    menu.addEventListener("click", showEditAccountModal);
   } else if (index == 1) {
     menu.addEventListener("click", logOut);
   }
 });
 
 // Edit account
-function editAccount() {
+function showEditAccountModal() {
   addOpacityOnHeaderMainFooter();
   navigationMenus.classList.remove("show");
   let editAccountModal = document.createElement("section");
@@ -72,7 +72,7 @@ function editAccount() {
                 </div>
              </div>
              <div class="edit-account-submit-button">
-                 <button>Submit</button>
+                 <button onclick="editAccount()">Submit</button>
              </div>
          </div>
      </div>
@@ -164,6 +164,11 @@ function showPassword() {
   });
 }
 
+function editAccount() {
+  showLoader("Saving changes...");
+  addOpacityOnHeaderMainFooter();
+}
+
 // Logout
 function logOut() {
   navigationMenus.classList.remove("show");
@@ -173,14 +178,14 @@ function logOut() {
 // Dashboard menus
 dashboardMenus.forEach((menu, index) => {
   if (index == 0) {
-    menu.addEventListener("click", createUser);
+    menu.addEventListener("click", showcreateUserModal);
   } else if (index == 1) {
     menu.addEventListener("click", userList);
   }
 });
 
 // Show create user modal
-function createUser() {
+function showcreateUserModal() {
   addOpacityOnHeaderMainFooter();
   let createUserModal = document.createElement("section");
   createUserModal.setAttribute("class", "modal-container");
@@ -220,7 +225,7 @@ function createUser() {
               </div>
 
               <div class="create-user-submit-button">
-                  <button>Submit</button>
+                  <button onclick="createUser()">Submit</button>
               </div>
           </div>
       </div>
@@ -280,4 +285,50 @@ function removeOpacityOnHeaderMainFooter() {
   header.style.opacity = 1;
   main.style.opacity = 1;
   footer.style.opacity = 1;
+}
+
+// Function for creating user
+function createUser() {
+  showLoader("Creating user...");
+  addOpacityOnHeaderMainFooter();
+}
+
+// Function for showing loader
+function showLoader(label) {
+  let modalContainer = document.querySelector(".modal-container");
+  let loaderContainer = document.createElement("section");
+  loaderContainer.setAttribute("class", "spinning-loader-container");
+  loaderContainer.innerHTML = `<div class="spinning-loader-content">
+  <div class="lds-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+  <div class="loader-title">
+      <h1>${label}</h1>
+  </div>
+</div>
+  `;
+
+  body.insertBefore(loaderContainer, modalContainer);
+  loaderContainer.style.display = "flex";
+  closeModal();
+  addSpinningLoaderOpacity();
+}
+
+//Add opacity for spinning loader
+function addSpinningLoaderOpacity() {
+  setTimeout(() => {
+    let spinningLoader = document.querySelector(".spinning-loader-container");
+    spinningLoader.style.opacity = "1";
+  }, 100);
 }
