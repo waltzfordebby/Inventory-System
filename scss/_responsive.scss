@@ -1,5 +1,65 @@
 @include mediaSm {
   body {
+    .modal-container {
+      .modal {
+        &.create-user {
+          width: 100vw;
+          height: 100vh;
+
+          .modal-content {
+            .close-button {
+              button {
+                margin: 0.3rem 1rem 0rem 0rem;
+              }
+            }
+            .create-user-container {
+              .create-user-content {
+                grid-template-columns: 1fr repeat(2, minmax(auto, 13rem)) 1fr;
+                padding: 1rem;
+                .create-user-input-fields {
+                  grid-template-columns: 1fr;
+                }
+              }
+            }
+          }
+        }
+        &.edit-account {
+          width: 100vw !important;
+          height: 100vh !important;
+          .modal-content {
+            .close-button {
+              button {
+                margin: 0.3rem 0.5rem 0rem 0rem;
+              }
+            }
+            .edit-account-container {
+              .edit-account-content {
+                padding: 1rem;
+
+                .edit-account-input-fields {
+                  grid-template-columns: 1fr;
+
+                  .password-container {
+                    input {
+                    }
+
+                    span {
+                      i {
+                        position: fixed;
+                        margin-top: -1.5rem;
+                        margin-left: 17.3rem !important;
+                        cursor: pointer;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     &.system-login {
       background: $secondary-bg-color;
 
@@ -42,6 +102,8 @@
     main {
       &.dashboard {
         .dashboard-menus-container {
+          margin-top: 1rem;
+          margin-bottom: 1rem;
           grid-template-columns: 1fr;
           grid-row-gap: 3rem;
         }
@@ -52,6 +114,66 @@
 
 @include mediaMd {
   body {
+    .modal-container {
+      .modal {
+        &.create-user {
+          width: 100vw;
+          height: 100vh;
+
+          .modal-content {
+            .close-button {
+              button {
+                margin: 0.3rem 0.5rem 0rem 0rem;
+              }
+            }
+            .create-user-container {
+              .create-user-content {
+                grid-template-columns: 1fr repeat(2, minmax(auto, 15rem)) 1fr;
+              }
+            }
+          }
+        }
+
+        &.edit-account {
+          width: 100vw !important;
+          height: 100vh !important;
+
+          .modal-content {
+            .close-button {
+              button {
+                margin: 0.3rem 0.3rem 0rem 0rem;
+              }
+            }
+            .edit-account-container {
+              .edit-account-content {
+                padding: 1rem;
+
+                .edit-account-input-fields {
+                  grid-template-columns: 1fr;
+
+                  .password-container {
+                    margin-right: 3.8rem;
+                    input {
+                      width: 100%;
+                    }
+
+                    span {
+                      i {
+                        position: fixed;
+                        margin-top: -1.6rem;
+                        margin-left: 26.5rem;
+                        cursor: pointer;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     header {
       &.dashboard-navigation {
         .logo-navigation-container {

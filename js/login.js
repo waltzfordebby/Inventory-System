@@ -39,6 +39,7 @@ class User {
       await removeOpacity();
       await removeNotification();
     }
+
     // Add opacity function
     function addOpacity() {
       return new Promise((resolve, reject) => {
@@ -144,7 +145,7 @@ function userLogin(e) {
     userDetails.push(element.value);
   });
 
-  //   Create a user object
+  // Create a user object
   const userLogin = new User(...userDetails);
 
   if (userLogin.validateIfEmpty() === "username and password") {

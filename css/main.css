@@ -453,6 +453,7 @@ body .modal-container .modal.create-user .modal-content .close-button button {
   margin: 0.3rem 0.2rem 0rem 0rem;
   outline: none;
   border: none;
+  background: none;
 }
 body .modal-container .modal.create-user .modal-content .close-button button:hover {
   cursor: pointer;
@@ -563,6 +564,7 @@ body .modal-container .modal.edit-account .modal-content .close-button button {
   margin: 0.3rem 0.2rem 0rem 0rem;
   outline: none;
   border: none;
+  background: none;
 }
 body .modal-container .modal.edit-account .modal-content .close-button button:hover {
   cursor: pointer;
@@ -769,6 +771,39 @@ body footer {
 }
 
 @media screen and (max-width: 500px) {
+  body .modal-container .modal.create-user {
+    width: 100vw;
+    height: 100vh;
+  }
+  body .modal-container .modal.create-user .modal-content .close-button button {
+    margin: 0.3rem 1rem 0rem 0rem;
+  }
+  body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content {
+    grid-template-columns: 1fr repeat(2, minmax(auto, 13rem)) 1fr;
+    padding: 1rem;
+  }
+  body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content .create-user-input-fields {
+    grid-template-columns: 1fr;
+  }
+  body .modal-container .modal.edit-account {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+  body .modal-container .modal.edit-account .modal-content .close-button button {
+    margin: 0.3rem 0.5rem 0rem 0rem;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content {
+    padding: 1rem;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields {
+    grid-template-columns: 1fr;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container span i {
+    position: fixed;
+    margin-top: -1.5rem;
+    margin-left: 17.3rem !important;
+    cursor: pointer;
+  }
   body.system-login {
     background: #b2ece1;
   }
@@ -794,11 +829,48 @@ body footer {
     margin-left: -0.3rem;
   }
   body main.dashboard .dashboard-menus-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     grid-template-columns: 1fr;
     grid-row-gap: 3rem;
   }
 }
 @media screen and (max-width: 768px) {
+  body .modal-container .modal.create-user {
+    width: 100vw;
+    height: 100vh;
+  }
+  body .modal-container .modal.create-user .modal-content .close-button button {
+    margin: 0.3rem 0.5rem 0rem 0rem;
+  }
+  body .modal-container .modal.create-user .modal-content .create-user-container .create-user-content {
+    grid-template-columns: 1fr repeat(2, minmax(auto, 15rem)) 1fr;
+  }
+  body .modal-container .modal.edit-account {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+  body .modal-container .modal.edit-account .modal-content .close-button button {
+    margin: 0.3rem 0.3rem 0rem 0rem;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content {
+    padding: 1rem;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields {
+    grid-template-columns: 1fr;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container {
+    margin-right: 3.8rem;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container input {
+    width: 100%;
+  }
+  body .modal-container .modal.edit-account .modal-content .edit-account-container .edit-account-content .edit-account-input-fields .password-container span i {
+    position: fixed;
+    margin-top: -1.6rem;
+    margin-left: 26.5rem;
+    cursor: pointer;
+  }
   body header.dashboard-navigation .logo-navigation-container {
     grid-template-columns: 1fr;
     grid-row-gap: 0.5rem;
