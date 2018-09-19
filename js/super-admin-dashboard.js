@@ -24,6 +24,15 @@ document.addEventListener("click", event => {
   }
 });
 
+// Hide navigation menu on pressing escape
+document.addEventListener("keyup", event => {
+  if (event.keyCode == 27) {
+    try {
+      navigationMenus.classList.remove("show");
+    } catch {}
+  }
+});
+
 // Navigation menu list buttons
 navigationMenusList.forEach((menu, index) => {
   if (index == 0) {
@@ -264,16 +273,26 @@ function createUser() {
   function validateCreateUserInfos() {
     let numberOfNotEmpty = 0;
     let status = false;
+    let birthdayStatus = true;
 
+    // Function for validating birthday
     function validateBirthday(birthday) {
       let date = new Date();
       let year = date.getFullYear();
-      let birthdayKey = ["Year", "Month", "Year"];
+      let birthdayKey = ["Year", "Month", "Day"];
       let birthdayArray = birthday.split("-");
+      let birthdayMap = {};
 
-      birthdayArray.forEach(value => {
-        console.log(value);
+      birthdayArray.forEach((value, index) => {
+        birthdayMap[birthdayKey[index]] = value;
       });
+
+      if (birthdayMap.Year <= 1800) {
+        birthdayStatus = false;
+      } else {
+        birthdayStatus = true;
+      }
+      return birthdayStatus;
     }
 
     createUserInputValues.forEach((input, index) => {
@@ -285,11 +304,16 @@ function createUser() {
       }
 
       if (index == createUserInputValues.length - 1) {
-        validateBirthday(input.value);
+        if (validateBirthday(input.value) == false) {
+          notification("error", `Invalid birthday`);
+        }
       }
     });
 
-    if (numberOfNotEmpty == createUserInputValues.length) {
+    if (
+      numberOfNotEmpty == createUserInputValues.length &&
+      birthdayStatus == true
+    ) {
       status = true;
     }
 
@@ -371,7 +395,6 @@ function createUser() {
 
     xhr.onload = function() {
       if (this.status == 200) {
-        console.log(this.responseText);
       }
     };
 
@@ -404,6 +427,7 @@ function notification(
     errorClass = "fa-check-circle";
   }
 
+  // Function for adding opacity, removing opacity and removing notification modal
   async function init() {
     await addOpacity();
     await removeOpacity();
@@ -489,7 +513,7 @@ document.addEventListener("click", event => {
   }
 });
 
-// Hide modal on outside click
+// Hide modal on pressing escape
 document.addEventListener("keyup", event => {
   if (event.keyCode == 27) {
     try {
@@ -543,6 +567,8 @@ function removeOpacityOnHeaderMainFooter() {
 function showLoader(label) {
   let modalContainer = document.querySelector(".modal-container");
   let loaderContainer = document.createElement("section");
+
+  // Function for calling spinning loader, removing spinning loader opacity and removing loader element
   async function init() {
     await addSpinningLoaderOpacity();
     await removeSpinningLoaderOpacity();

@@ -24,7 +24,7 @@ function showMenus() {
   navigationMenus.classList.toggle("show");
 }
 
-//Hide menu on click outside
+//Hide navigation   menu on click outside
 document.addEventListener("click", event => {
   if (
     event.target.closest("nav aside") ||
@@ -33,6 +33,15 @@ document.addEventListener("click", event => {
     return;
   } else if (!event.target.closest("nav aside")) {
     navigationMenus.classList.remove("show");
+  }
+});
+
+// Hide navigation menu on pressing escape
+document.addEventListener("keyup", event => {
+  if (event.keyCode == 27) {
+    try {
+      navigationMenus.classList.remove("show");
+    } catch {}
   }
 });
 
@@ -47,24 +56,9 @@ navigationMenusList.forEach((menu, index) => {
   }
 });
 
-// Toggle search icon on focus and focusout
-searchSection.addEventListener("focus", removeSearchIcon);
-searchSection.addEventListener("focusout", addSearchIcon);
+// ************Navigation menu functions************
 
-function removeSearchIcon() {
-  searchSection.style.background = "none";
-}
-
-function addSearchIcon() {
-  if (searchSection.value == "") {
-    searchSection.style.background =
-      "url(../images/icons8-search-filled-30.png) no-repeat center";
-  } else if (searchSection.value != "") {
-    searchSection.style.background = "none";
-  }
-}
-
-// Edit account
+// Show edit account modal
 function showEditAccountModal() {
   addOpacityOnHeaderMainFooter();
   navigationMenus.classList.remove("show");
@@ -109,7 +103,7 @@ function showEditAccountModal() {
   addModalOpacity();
 }
 
-// Function for changing change field in edit account
+// Function for changing username or password in edit account
 function changeSelect() {
   let editAccountModal = document.querySelector(".edit-account");
   let changeSelectContainer = document.querySelector(
@@ -166,7 +160,7 @@ function changeSelect() {
   }
 }
 
-// Show password
+// Show password function for edit account
 function showPassword() {
   let passwordInputFields = document.querySelectorAll(
     ".password-container input"
@@ -190,8 +184,9 @@ function showPassword() {
   });
 }
 
+// Function for editing the account/change user data to database
 function editAccount() {
-  showLoader("Saving changes...");
+  showLoader("Saving changes...", "Account successfully updated");
   addOpacityOnHeaderMainFooter();
 }
 
@@ -227,7 +222,7 @@ function showcreateUserModal() {
                   <input type="text">
                   <label>Last Name</label>
                   <input type="text">
-                  <label>Gender</label>
+                  <label>Sex</label>
                   <select>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
@@ -248,12 +243,299 @@ function showcreateUserModal() {
   addModalOpacity();
 }
 
+// Function for creating user
+function createUser() {
+  let sendCreateUserData = true;
+  let createUserData = new FormData();
+  let tableColumnTitles = [];
+  const inputWithLabel = {};
+  const selectWithLabel = {};
+  let mergeTwoFields = {};
+
+  let createUserDetailsTitles = document.querySelectorAll(
+    ".create-user-input-fields label"
+  );
+  let createUserInputValues = document.querySelectorAll(
+    ".create-user-input-fields input"
+  );
+  let createUserSelectValues = document.querySelectorAll(
+    ".create-user-input-fields select"
+  );
+
+  // Function for validating create user infos
+  function validateCreateUserInfos() {
+    let numberOfNotEmpty = 0;
+    let status = false;
+    let birthdayStatus = true;
+
+    // Function for validating birthday
+    function validateBirthday(birthday) {
+      let date = new Date();
+      let year = date.getFullYear();
+      let birthdayKey = ["Year", "Month", "Day"];
+      let birthdayArray = birthday.split("-");
+      let birthdayMap = {};
+
+      birthdayArray.forEach((value, index) => {
+        birthdayMap[birthdayKey[index]] = value;
+      });
+
+      if (birthdayMap.Year <= 1800) {
+        birthdayStatus = false;
+      } else {
+        birthdayStatus = true;
+      }
+      return birthdayStatus;
+    }
+
+    createUserInputValues.forEach((input, index) => {
+      let label = input.previousElementSibling.innerHTML;
+      if (input.value == "") {
+        notification("error", `${label} is empty`);
+      } else {
+        numberOfNotEmpty++;
+      }
+
+      if (index == createUserInputValues.length - 1) {
+        if (validateBirthday(input.value) == false) {
+          notification("error", `Invalid birthday`);
+        }
+      }
+    });
+
+    if (
+      numberOfNotEmpty == createUserInputValues.length &&
+      birthdayStatus == true
+    ) {
+      status = true;
+    }
+
+    return status;
+  }
+
+  // If validation returns true add users info to database
+  if (validateCreateUserInfos() == true) {
+    showLoader("Creating User...", "User creation is successful");
+
+    // Create the formdata variable name
+    createUserDetailsTitles.forEach((title, index) => {
+      tableColumnTitles[index] = title.innerHTML
+        .split(" ")
+        .map(
+          (word, index) =>
+            index > 0
+              ? word.substr(0, 1).toUpperCase() + word.substring(1)
+              : word.substr(0, 1).toLowerCase() + word.substring(1)
+        )
+        .join("");
+    });
+
+    // Create the input field value
+    createUserInputValues.forEach((input, index) => {
+      let label = input.previousElementSibling.innerHTML;
+      let labelToArrayKey = label
+        .split(" ")
+        .map(
+          (word, index) =>
+            index > 0
+              ? word.substr(0, 1).toUpperCase() + word.substring(1)
+              : word.substr(0, 1).toLowerCase() + word.substring(1)
+        )
+        .join("");
+
+      inputWithLabel[labelToArrayKey] = input.value;
+    });
+
+    // Create the select field value
+    createUserSelectValues.forEach((select, index) => {
+      let label = select.previousElementSibling.innerHTML;
+      let labelToArrayKey = label
+        .split(" ")
+        .map(
+          (word, index) =>
+            index > 0
+              ? word.substr(0, 1).toUpperCase() + word.substring(1)
+              : word.substr(0, 1).toLowerCase() + word.substring(1)
+        )
+        .join("");
+      selectWithLabel[labelToArrayKey] = select.value;
+    });
+
+    // Merge input with label and select with label
+    mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
+
+    // Append the data of user to createUserData to send it to database
+    tableColumnTitles.forEach(title => {
+      createUserData.append(title, mergeTwoFields[title]);
+    });
+
+    // Append the sendCreateUserData to createUserData to process adding to database
+    createUserData.append("sendCreateUserData", sendCreateUserData);
+
+    // For debugging
+    // console.log(tableColumnTitles);
+    // console.log(inputWithLabel);
+    // console.log(selectWithLabel);
+    // console.log(mergeTwoFields);
+
+    // Output create user data
+    // for (var pair of createUserData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "../php/create-user.php", true);
+
+    xhr.onload = function() {
+      if (this.status == 200) {
+      }
+    };
+
+    xhr.send(createUserData);
+  }
+}
+
+// Logout
+function logOut() {
+  navigationMenus.classList.remove("show");
+  showLoader("Logging out...", "", "header");
+}
+
+// Toggle search icon on focus and focusout
+searchSection.addEventListener("focus", removeSearchIcon);
+searchSection.addEventListener("focusout", addSearchIcon);
+
+// Function for removing search icon on search bar when clicked
+function removeSearchIcon() {
+  searchSection.style.background = "none";
+}
+
+// Function for adding search icon on search bar when not focused or search bar has no content
+function addSearchIcon() {
+  if (searchSection.value == "") {
+    searchSection.style.background =
+      "url(../images/icons8-search-filled-30.png) no-repeat center";
+  } else if (searchSection.value != "") {
+    searchSection.style.background = "none";
+  }
+}
+
+// ************Utility functions for modal and submitting data************
+
+// Function for notification
+function notification(
+  notificationType,
+  notification,
+  location = ".modal-container"
+) {
+  let errorClass = "";
+  let container = document.querySelector(`${location}`);
+  let submitButton = document.querySelector(
+    ".create-user-submit-button button"
+  );
+
+  // Set the of fontawesome icon
+  if (notificationType == "error") {
+    errorClass = "fa-exclamation-circle";
+  } else if (notificationType == "success") {
+    errorClass = "fa-check-circle";
+  }
+
+  // Function for adding opacity, removing opacity and removing notification modal
+  async function init() {
+    await addOpacity();
+    await removeOpacity();
+    await removeNotification();
+  }
+
+  // Add opacity function
+  function addOpacity() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        let notificationContainer = document.querySelector(
+          ".notification-container"
+        );
+        notificationContainer.style.opacity = "1";
+        const error = false;
+        if (!error) {
+          resolve();
+        } else {
+          reject("Error: Something went wrong on add opacity function");
+        }
+      }, 20);
+    });
+  }
+
+  // Remove opacity function
+  function removeOpacity() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        let notificationContainer = document.querySelector(
+          ".notification-container"
+        );
+        notificationContainer.style.opacity = "0";
+        try {
+          submitButton.blur();
+        } catch {}
+        const error = false;
+        if (!error) {
+          resolve();
+        } else {
+          reject("Error: Something went wrong on remove opacity function");
+        }
+      }, 1000);
+    });
+  }
+
+  // Remove notification
+  function removeNotification() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        let notificationContainer = document.querySelector(
+          ".notification-container"
+        );
+        body.removeChild(notificationContainer);
+        const error = false;
+        if (!error) {
+          resolve();
+        } else {
+          reject("Error: Something went wrong on removing notification");
+        }
+      }, 500);
+    });
+  }
+
+  let notificationContainer = document.createElement("section");
+  notificationContainer.setAttribute("class", "notification-container");
+  notificationContainer.innerHTML = `
+         <!-- Notification -->
+        <div class="notification-content ${notificationType}">
+            <span>
+                <i class="fas ${errorClass}"></i> ${notification}</span>
+        </div>`;
+  body.insertBefore(notificationContainer, container);
+  notificationContainer.style.display = "flex";
+  init();
+}
+
 // Hide modal on outside click
 document.addEventListener("click", event => {
   if (event.target.closest(".modal")) {
     return;
   } else if (event.target.closest(".modal-container")) {
     closeModal();
+  }
+});
+
+// Hide modal on pressing escape
+document.addEventListener("keyup", event => {
+  if (event.keyCode == 27) {
+    try {
+      let modal = document.querySelector(".modal-container");
+      if (modal) {
+        closeModal();
+      }
+    } catch {}
   }
 });
 
@@ -267,9 +549,11 @@ function addModalOpacity() {
 
 //Close button
 function closeModal() {
-  let modal = document.querySelector(".modal-container");
-  modal.style.opacity = "0";
-  removeModalElement();
+  try {
+    let modal = document.querySelector(".modal-container");
+    modal.style.opacity = "0";
+    removeModalElement();
+  } catch {}
 }
 
 //Remove modal element
@@ -279,10 +563,6 @@ function removeModalElement() {
     let modal = document.querySelector(".modal-container");
     document.body.removeChild(modal);
   }, 200);
-}
-
-function userList() {
-  window.location.replace("user-list.html");
 }
 
 // Function for adding opacity to header, main and footer
@@ -299,16 +579,22 @@ function removeOpacityOnHeaderMainFooter() {
   footer.style.opacity = 1;
 }
 
-// Function for creating user
-function createUser() {
-  showLoader("Creating user...");
-  addOpacityOnHeaderMainFooter();
-}
-
 // Function for showing loader
-function showLoader(label) {
-  let modalContainer = document.querySelector(".modal-container");
+function showLoader(
+  startProcessTitle = "",
+  endProcessTitle = "",
+  outputAbove = ".modal-container"
+) {
+  let container = document.querySelector(outputAbove);
   let loaderContainer = document.createElement("section");
+
+  // Function for calling spinning loader, removing spinning loader opacity and removing loader element
+  async function init() {
+    await addSpinningLoaderOpacity();
+    await removeSpinningLoaderOpacity();
+    await removeSpinningLoaderElement(endProcessTitle);
+  }
+
   loaderContainer.setAttribute("class", "spinning-loader-container");
   loaderContainer.innerHTML = `<div class="spinning-loader-content">
   <div class="lds-spinner">
@@ -326,27 +612,66 @@ function showLoader(label) {
       <div></div>
   </div>
   <div class="loader-title">
-      <h1>${label}</h1>
+      <h1>${startProcessTitle}</h1>
   </div>
 </div>
   `;
 
-  body.insertBefore(loaderContainer, modalContainer);
+  body.insertBefore(loaderContainer, container);
   loaderContainer.style.display = "flex";
   closeModal();
-  addSpinningLoaderOpacity();
+  addOpacityOnHeaderMainFooter();
+  init();
 }
 
 //Add opacity for spinning loader
 function addSpinningLoaderOpacity() {
-  setTimeout(() => {
-    let spinningLoader = document.querySelector(".spinning-loader-container");
-    spinningLoader.style.opacity = "1";
-  }, 100);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let spinningLoader = document.querySelector(".spinning-loader-container");
+      spinningLoader.style.opacity = "1";
+      const error = false;
+      if (!error) {
+        resolve();
+      } else {
+        reject("Error: Something went wrong on add spinning loader opacity");
+      }
+    }, 100);
+  });
 }
 
-// Logout
-function logOut() {
-  navigationMenus.classList.remove("show");
-  console.log("Logout");
+// Remove opacity for spinning loader
+function removeSpinningLoaderOpacity() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let spinningLoader = document.querySelector(".spinning-loader-container");
+      spinningLoader.style.opacity = "0";
+      const error = false;
+      if (!error) {
+        resolve();
+      } else {
+        reject("Error: Something went wrong on add spinning loader opacity");
+      }
+    }, 2000);
+  });
+}
+
+// Remove loader
+function removeSpinningLoaderElement(notificationContent = "") {
+  if (notificationContent != "") {
+    notification("success", notificationContent, "header");
+  }
+  removeOpacityOnHeaderMainFooter();
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let spinningLoader = document.querySelector(".spinning-loader-container");
+      document.body.removeChild(spinningLoader);
+      const error = false;
+      if (!error) {
+        resolve();
+      } else {
+        reject("Error: Something went wrong on remove spinning loader opacity");
+      }
+    }, 2000);
+  });
 }

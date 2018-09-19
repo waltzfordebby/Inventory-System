@@ -43,19 +43,6 @@ if(isset($_POST['sendCreateUserData'])){
     
     // Set creation time
     $creation_time = date("h:i:s A");
-
-    // echo $typeOfUser.'</br>'
-    // .$firstName.'</br>'
-    // .$middleName.'</br>'
-    // .$lastName.'</br>'
-    // .$sex.'</br>'
-    // .$birthday.'</br>'
-    // .$creation_time.'</br>'
-    // .$creation_date.'</br>'
-    // ;
-    
-
-    
     
     $sql = 'INSERT INTO user_accounts (type_of_user, first_name, middle_name, last_name, sex, birthday, time_of_creation, date_of_creation) 
     VALUES (:type_of_user, :first_name, :middle_name, :last_name, :sex, :birthday, :creation_time, :creation_date)';
@@ -65,7 +52,7 @@ if(isset($_POST['sendCreateUserData'])){
     'last_name' => $lastName, 'sex' => $sex, 'birthday' => $birthday,
     'creation_time' => $creation_time, 'creation_date' => $creation_date]);
     
-    echo 'User is created!';
+
 
 
 
