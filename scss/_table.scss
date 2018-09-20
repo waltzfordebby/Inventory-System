@@ -57,17 +57,28 @@ body {
 
             td {
               text-align: center;
-              padding: 0.5rem 0.6rem;
+              padding-top: 0.4rem;
+              padding-bottom: 0.4rem;
+              padding-right: 0.2rem;
+              padding-left: 0.2rem;
               border-bottom: 2px solid black;
               border-right: 2px solid black;
 
-              &:nth-child(6) {
-                cursor: pointer;
+              &:nth-child(3) {
+                i {
+                  cursor: pointer;
+                }
+
+                padding-right: 1.5rem;
+                padding-left: 1.5rem;
               }
 
               &:last-child {
                 border-right: none;
-                cursor: pointer;
+
+                i {
+                  cursor: pointer;
+                }
               }
             }
           }

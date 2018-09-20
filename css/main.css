@@ -710,15 +710,24 @@ body main .table-container table tbody tr th:last-child {
 }
 body main .table-container table tbody tr td {
   text-align: center;
-  padding: 0.5rem 0.6rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
   border-bottom: 2px solid black;
   border-right: 2px solid black;
 }
-body main .table-container table tbody tr td:nth-child(6) {
+body main .table-container table tbody tr td:nth-child(3) {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+body main .table-container table tbody tr td:nth-child(3) i {
   cursor: pointer;
 }
 body main .table-container table tbody tr td:last-child {
   border-right: none;
+}
+body main .table-container table tbody tr td:last-child i {
   cursor: pointer;
 }
 body main .table-pagination {

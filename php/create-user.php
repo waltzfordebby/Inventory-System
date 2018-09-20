@@ -1,4 +1,5 @@
 <?php
+// Connect to database
 require_once('database-connection.php');
 
 // Confirm if the create user data is being sent

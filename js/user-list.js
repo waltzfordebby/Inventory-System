@@ -7,6 +7,7 @@ const main = document.querySelector("main");
 const navigationMenus = document.querySelector("nav aside");
 const navigationMenusList = document.querySelectorAll("nav aside ul li");
 const searchSection = document.querySelector(".table-search input");
+const table = document.querySelector("tbody");
 
 // Logo button
 logo.addEventListener("click", gotoDashboard);
@@ -418,6 +419,81 @@ function addSearchIcon() {
   } else if (searchSection.value != "") {
     searchSection.style.background = "none";
   }
+}
+
+// ************Users table functionalities************
+
+// Insert the users to a table
+insertDataToTable();
+
+// Function for inserting users to table
+function insertDataToTable() {
+  let tableHeader = `<tr>
+  <th>Type of User</th>
+  <th>Name</th>
+  <th>Edit</th>
+  <th>Delete</th>
+  `;
+  let tableData = "";
+  let tableContent = "";
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "../php/user-list.php");
+  xhr.onload = function() {
+    if (this.status == 200) {
+      let userList = JSON.parse(this.responseText);
+
+      for (let user in userList) {
+        let userId = userList[user].user_id;
+        let typeOfUser = userList[user].type_of_user;
+        let firstName = userList[user].first_name;
+        let middleName = userList[user].middle_name;
+        let lastName = userList[user].last_name;
+        let sex = userList[user].sex;
+        let birthday = userList[user].birthday;
+        let timeOfCreation = userList[user].time_of_creation;
+        let dateOfCreation = userList[user].date_of_creation;
+
+        tableData += `
+            <tr>
+            <td>${typeOfUser}</td>
+            <td>${firstName} ${middleName} ${lastName}</td>
+            <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+            <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+            </tr>
+            `;
+      }
+
+      tableContent = `${tableHeader}${tableData}`;
+      table.innerHTML = `${tableContent}`;
+    }
+  };
+
+  xhr.send();
+}
+
+// Function for editing user
+function editUser(userId) {
+  console.log(userId);
+}
+
+// Function for deleting user
+function deleteUser(userId) {
+  let userIdToDelete = new FormData();
+  let deleteUserStatus = true;
+
+  userIdToDelete.append("deleteUser", deleteUserStatus);
+  userIdToDelete.append("userId", userId);
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "../php/delete-user.php");
+  xhr.onload = function() {
+    if (this.status == 200) {
+      insertDataToTable();
+    }
+  };
+
+  xhr.send(userIdToDelete);
 }
 
 // ************Utility functions for modal and submitting data************

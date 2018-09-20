@@ -219,9 +219,9 @@ function showcreateUserModal() {
               <div class="create-user-input-fields">
                   <label>Type Of User</label>
                   <select>
-                      <option value="super_admin">Super Admin</option>
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
+                      <option value="Super Admin">Super Admin</option>
+                      <option value="Admin">Admin</option>
+                      <option value="User">User</option>
                   </select>
                   <label>First Name</label>
                   <input type="text">
