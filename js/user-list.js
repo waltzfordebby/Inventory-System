@@ -7,6 +7,9 @@ const main = document.querySelector("main");
 const navigationMenus = document.querySelector("nav aside");
 const navigationMenusList = document.querySelectorAll("nav aside ul li");
 const searchSection = document.querySelector(".table-search input");
+const tableNotificationContainer = document.querySelector(
+  ".table-notification"
+);
 const table = document.querySelector("tbody");
 
 // Logo button
@@ -213,9 +216,9 @@ function showcreateUserModal() {
               <div class="create-user-input-fields">
                   <label>Type Of User</label>
                   <select>
-                      <option value="super_admin">Super Admin</option>
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
+                      <option value="Super Admin">Super Admin</option>
+                      <option value="Admin">Admin</option>
+                      <option value="User">User</option>
                   </select>
                   <label>First Name</label>
                   <input type="text">
@@ -266,6 +269,7 @@ function createUser() {
   // Function for validating create user infos
   function validateCreateUserInfos() {
     let numberOfNotEmpty = 0;
+    let validName = 0;
     let status = false;
     let birthdayStatus = true;
 
@@ -291,10 +295,19 @@ function createUser() {
 
     createUserInputValues.forEach((input, index) => {
       let label = input.previousElementSibling.innerHTML;
+      let regex = /^[a-zA-Z]+$/;
       if (input.value == "") {
         notification("error", `${label} is empty`);
       } else {
         numberOfNotEmpty++;
+      }
+
+      if (index <= 2) {
+        if (!input.value.match(regex)) {
+          notification("error", `${label} is not valid`);
+        } else {
+          validName++;
+        }
       }
 
       if (index == createUserInputValues.length - 1) {
@@ -306,7 +319,8 @@ function createUser() {
 
     if (
       numberOfNotEmpty == createUserInputValues.length &&
-      birthdayStatus == true
+      birthdayStatus == true &&
+      validName == 3
     ) {
       status = true;
     }
@@ -316,7 +330,11 @@ function createUser() {
 
   // If validation returns true add users info to database
   if (validateCreateUserInfos() == true) {
-    showLoader("Creating User...", "User creation is successful");
+    showLoader(
+      "create-user",
+      "Creating User...",
+      "User creation is successful"
+    );
 
     // Create the formdata variable name
     createUserDetailsTitles.forEach((title, index) => {
@@ -402,9 +420,12 @@ function logOut() {
   showLoader("Logging out...", "", "header");
 }
 
+// ************Search table functionalities************
+
 // Toggle search icon on focus and focusout
 searchSection.addEventListener("focus", removeSearchIcon);
 searchSection.addEventListener("focusout", addSearchIcon);
+searchSection.addEventListener("keyup", searchUser);
 
 // Function for removing search icon on search bar when clicked
 function removeSearchIcon() {
@@ -421,6 +442,66 @@ function addSearchIcon() {
   }
 }
 
+function searchUser() {
+  let searchNotification = `
+  <h1><i class="far fa-frown-open fa-3x"></i> User doesn't exist.</h1>`;
+  let tableHeader = `<tr>
+  <th>Type of User</th>
+  <th>Name</th>
+  <th>Edit</th>
+  <th>Delete</th>
+  `;
+  let tableData = "";
+  let tableContent = "";
+  let search = searchSection.value;
+  let searchUser = true;
+  let searchUserDatas = new FormData();
+
+  searchUserDatas.append("searchUser", searchUser);
+  searchUserDatas.append("user", search);
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "../php/search-user.php");
+  xhr.onload = function() {
+    if (this.status == 200) {
+      let userList = JSON.parse(this.responseText);
+
+      if (userList != "") {
+        for (let user in userList) {
+          let userId = userList[user].user_id;
+          let typeOfUser = userList[user].type_of_user;
+          let firstName = userList[user].first_name;
+          let middleName = userList[user].middle_name;
+          let lastName = userList[user].last_name;
+          let sex = userList[user].sex;
+          let birthday = userList[user].birthday;
+          let timeOfCreation = userList[user].time_of_creation;
+          let dateOfCreation = userList[user].date_of_creation;
+
+          tableData += `
+              <tr>
+              <td>${typeOfUser}</td>
+              <td>${firstName} ${middleName} ${lastName}</td>
+              <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+              <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+              </tr>
+              `;
+        }
+
+        tableContent = `${tableHeader}${tableData}`;
+        table.innerHTML = `${tableContent}`;
+        tableNotificationContainer.innerHTML = ``;
+      } else {
+        tableNotificationContainer.innerHTML = `${searchNotification}`;
+        tableContent = `${tableHeader}`;
+        table.innerHTML = `${tableContent}`;
+      }
+    }
+  };
+
+  xhr.send(searchUserDatas);
+}
+
 // ************Users table functionalities************
 
 // Insert the users to a table
@@ -428,6 +509,9 @@ insertDataToTable();
 
 // Function for inserting users to table
 function insertDataToTable() {
+  let notification = `<h1><i class="far fa-meh fa-3x"></i> User list is empty</h1>`;
+  let getUser = true;
+  let getUserData = new FormData();
   let tableHeader = `<tr>
   <th>Type of User</th>
   <th>Name</th>
@@ -437,24 +521,27 @@ function insertDataToTable() {
   let tableData = "";
   let tableContent = "";
 
+  getUserData.append("getUser", getUser);
+
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "../php/user-list.php");
   xhr.onload = function() {
     if (this.status == 200) {
       let userList = JSON.parse(this.responseText);
 
-      for (let user in userList) {
-        let userId = userList[user].user_id;
-        let typeOfUser = userList[user].type_of_user;
-        let firstName = userList[user].first_name;
-        let middleName = userList[user].middle_name;
-        let lastName = userList[user].last_name;
-        let sex = userList[user].sex;
-        let birthday = userList[user].birthday;
-        let timeOfCreation = userList[user].time_of_creation;
-        let dateOfCreation = userList[user].date_of_creation;
+      if (userList != "") {
+        for (let user in userList) {
+          let userId = userList[user].user_id;
+          let typeOfUser = userList[user].type_of_user;
+          let firstName = userList[user].first_name;
+          let middleName = userList[user].middle_name;
+          let lastName = userList[user].last_name;
+          let sex = userList[user].sex;
+          let birthday = userList[user].birthday;
+          let timeOfCreation = userList[user].time_of_creation;
+          let dateOfCreation = userList[user].date_of_creation;
 
-        tableData += `
+          tableData += `
             <tr>
             <td>${typeOfUser}</td>
             <td>${firstName} ${middleName} ${lastName}</td>
@@ -462,14 +549,20 @@ function insertDataToTable() {
             <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
             </tr>
             `;
-      }
+        }
 
-      tableContent = `${tableHeader}${tableData}`;
-      table.innerHTML = `${tableContent}`;
+        tableContent = `${tableHeader}${tableData}`;
+        table.innerHTML = `${tableContent}`;
+        tableNotificationContainer.innerHTML = ``;
+      } else {
+        tableContent = `${tableHeader}`;
+        table.innerHTML = `${tableContent}`;
+        tableNotificationContainer.innerHTML = `${notification}`;
+      }
     }
   };
 
-  xhr.send();
+  xhr.send(getUserData);
 }
 
 // Function for editing user
@@ -657,6 +750,7 @@ function removeOpacityOnHeaderMainFooter() {
 
 // Function for showing loader
 function showLoader(
+  processName = "",
   startProcessTitle = "",
   endProcessTitle = "",
   outputAbove = ".modal-container"
@@ -668,7 +762,7 @@ function showLoader(
   async function init() {
     await addSpinningLoaderOpacity();
     await removeSpinningLoaderOpacity();
-    await removeSpinningLoaderElement(endProcessTitle);
+    await removeSpinningLoaderElement(processName, endProcessTitle);
   }
 
   loaderContainer.setAttribute("class", "spinning-loader-container");
@@ -733,9 +827,16 @@ function removeSpinningLoaderOpacity() {
 }
 
 // Remove loader
-function removeSpinningLoaderElement(notificationContent = "") {
+function removeSpinningLoaderElement(
+  processName = "",
+  notificationContent = ""
+) {
   if (notificationContent != "") {
     notification("success", notificationContent, "header");
+  }
+
+  if (processName == "create-user") {
+    insertDataToTable();
   }
   removeOpacityOnHeaderMainFooter();
   return new Promise((resolve, reject) => {

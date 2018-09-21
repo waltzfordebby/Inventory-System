@@ -84,6 +84,14 @@ body {
           }
         }
       }
+
+      .table-notification {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
     .table-pagination {

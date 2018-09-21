@@ -272,6 +272,7 @@ function createUser() {
   // Function for validating create user infos
   function validateCreateUserInfos() {
     let numberOfNotEmpty = 0;
+    let validName = 0;
     let status = false;
     let birthdayStatus = true;
 
@@ -297,10 +298,19 @@ function createUser() {
 
     createUserInputValues.forEach((input, index) => {
       let label = input.previousElementSibling.innerHTML;
+      let regex = /^[a-zA-Z]+$/;
       if (input.value == "") {
         notification("error", `${label} is empty`);
       } else {
         numberOfNotEmpty++;
+      }
+
+      if (index <= 2) {
+        if (!input.value.match(regex)) {
+          notification("error", `${label} is not valid`);
+        } else {
+          validName++;
+        }
       }
 
       if (index == createUserInputValues.length - 1) {
@@ -312,7 +322,8 @@ function createUser() {
 
     if (
       numberOfNotEmpty == createUserInputValues.length &&
-      birthdayStatus == true
+      birthdayStatus == true &&
+      validName == 3
     ) {
       status = true;
     }
