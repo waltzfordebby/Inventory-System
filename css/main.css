@@ -696,6 +696,11 @@ body main .table-container table {
   border-collapse: collapse;
   border: 2px solid black;
 }
+body main .table-container table tbody {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
 body main .table-container table tbody tr th {
   text-align: center;
   padding: 0rem 0.5rem;
@@ -716,6 +721,9 @@ body main .table-container table tbody tr td {
   padding-left: 0.2rem;
   border-bottom: 2px solid black;
   border-right: 2px solid black;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 body main .table-container table tbody tr td:nth-child(3) {
   padding-right: 1.5rem;

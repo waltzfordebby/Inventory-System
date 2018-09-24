@@ -529,6 +529,37 @@ function insertDataToTable() {
     if (this.status == 200) {
       let userList = JSON.parse(this.responseText);
 
+      // console.log(userList);
+
+      let search = "Admin".toLowerCase().replace(/\s/g, "");
+
+      userList.forEach((user, index) => {
+        let typeOfUser = user.type_of_user;
+        let fullName = `${user.first_name}${user.middle_name}${user.last_name}`;
+        let sex = user.sex;
+
+        if (
+          typeOfUser
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .substring(0, search.length) == search ||
+          fullName.toLowerCase().substring(0, search.length) == search ||
+          sex.toLowerCase().substring(0, search.length) == search
+        ) {
+          console.log(typeOfUser.split(""));
+          console.log(user.user_id);
+          console.log(user.first_name);
+          console.log(user.middle_name);
+          console.log(user.last_name);
+          console.log(user.birthday);
+          console.log(user.sex);
+          console.log(user.time_of_creation);
+          console.log(user.date_of_creation);
+        } else {
+          console.log("None");
+        }
+      });
+
       if (userList != "") {
         for (let user in userList) {
           let userId = userList[user].user_id;
