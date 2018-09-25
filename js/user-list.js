@@ -442,52 +442,124 @@ function addSearchIcon() {
   }
 }
 
+// function searchUser() {
+//   let searchNotification = `
+//   <h1><i class="far fa-frown-open fa-3x"></i> User doesn't exist.</h1>`;
+//   let tableHeader = `<tr>
+//   <th>Type of User</th>
+//   <th>Name</th>
+//   <th>Edit</th>
+//   <th>Delete</th>
+//   `;
+//   let tableData = "";
+//   let tableContent = "";
+//   let search = searchSection.value;
+//   let searchUser = true;
+//   let searchUserDatas = new FormData();
+
+//   searchUserDatas.append("searchUser", searchUser);
+//   searchUserDatas.append("user", search);
+
+//   let xhr = new XMLHttpRequest();
+//   xhr.open("POST", "../php/search-user.php");
+//   xhr.onload = function() {
+//     if (this.status == 200) {
+//       let userList = JSON.parse(this.responseText);
+
+//       if (userList != "") {
+//         for (let user in userList) {
+//           let userId = userList[user].user_id;
+//           let typeOfUser = userList[user].type_of_user;
+//           let firstName = userList[user].first_name;
+//           let middleName = userList[user].middle_name;
+//           let lastName = userList[user].last_name;
+//           let sex = userList[user].sex;
+//           let birthday = userList[user].birthday;
+//           let timeOfCreation = userList[user].time_of_creation;
+//           let dateOfCreation = userList[user].date_of_creation;
+
+//           tableData += `
+//               <tr>
+//               <td>${typeOfUser}</td>
+//               <td>${firstName} ${middleName} ${lastName}</td>
+//               <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+//               <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+//               </tr>
+//               `;
+//         }
+
+//         tableContent = `${tableHeader}${tableData}`;
+//         table.innerHTML = `${tableContent}`;
+//         tableNotificationContainer.innerHTML = ``;
+//       } else {
+//         tableNotificationContainer.innerHTML = `${searchNotification}`;
+//         tableContent = `${tableHeader}`;
+//         table.innerHTML = `${tableContent}`;
+//       }
+//     }
+//   };
+
+//   xhr.send(searchUserDatas);
+// }
+
 function searchUser() {
-  let searchNotification = `
-  <h1><i class="far fa-frown-open fa-3x"></i> User doesn't exist.</h1>`;
+  let getUserData = new FormData();
+  let getUser = true;
+  let emptyTable = `<h1><i class="far fa-meh fa-3x"></i> User list is empty</h1>`;
+  let searchNotification = `<h1><i class="far fa-frown-open fa-3x"></i> User doesn't exist.</h1>`;
   let tableHeader = `<tr>
-  <th>Type of User</th>
-  <th>Name</th>
-  <th>Edit</th>
-  <th>Delete</th>
-  `;
+    <th>Type of User</th>
+    <th>Name</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    `;
   let tableData = "";
   let tableContent = "";
-  let search = searchSection.value;
-  let searchUser = true;
-  let searchUserDatas = new FormData();
+  let search = searchSection.value.toLowerCase().replace(/\s/g, "");
 
-  searchUserDatas.append("searchUser", searchUser);
-  searchUserDatas.append("user", search);
+  getUserData.append("getUser", getUser);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "../php/search-user.php");
+  xhr.open("POST", "../php/user-list.php");
   xhr.onload = function() {
     if (this.status == 200) {
       let userList = JSON.parse(this.responseText);
 
-      if (userList != "") {
-        for (let user in userList) {
-          let userId = userList[user].user_id;
-          let typeOfUser = userList[user].type_of_user;
-          let firstName = userList[user].first_name;
-          let middleName = userList[user].middle_name;
-          let lastName = userList[user].last_name;
-          let sex = userList[user].sex;
-          let birthday = userList[user].birthday;
-          let timeOfCreation = userList[user].time_of_creation;
-          let dateOfCreation = userList[user].date_of_creation;
+      userList.forEach((user, index) => {
+        let userId = user.user_id;
+        let typeOfUser = user.type_of_user;
+        let firstName = user.first_name;
+        let middleName = user.middle_name;
+        let lastName = user.last_name;
+        let birthday = user.birthday;
+        let sex = user.sex;
+        let timeOfCreation = user.date_of_creation;
+        let dateOfCreation = user.date_of_creation;
 
-          tableData += `
-              <tr>
+        if (
+          typeOfUser
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .substring(0, search.length) == search ||
+          firstName.toLowerCase().substring(0, search.length) == search ||
+          middleName.toLowerCase().substring(0, search.length) == search ||
+          lastName.toLowerCase().substring(0, search.length) == search ||
+          sex.toLowerCase().substring(0, search.length) == search
+        ) {
+          let fullName = `${firstName} ${middleName.substring(
+            0,
+            1
+          )}. ${lastName}`;
+          tableData += `<tr>
               <td>${typeOfUser}</td>
-              <td>${firstName} ${middleName} ${lastName}</td>
+              <td>${fullName}</td>
               <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
               <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
-              </tr>
-              `;
+              </tr>`;
         }
+      });
 
+      if (tableData != "") {
         tableContent = `${tableHeader}${tableData}`;
         table.innerHTML = `${tableContent}`;
         tableNotificationContainer.innerHTML = ``;
@@ -498,8 +570,7 @@ function searchUser() {
       }
     }
   };
-
-  xhr.send(searchUserDatas);
+  xhr.send(getUserData);
 }
 
 // ************Users table functionalities************
@@ -528,60 +599,26 @@ function insertDataToTable() {
   xhr.onload = function() {
     if (this.status == 200) {
       let userList = JSON.parse(this.responseText);
-
-      // console.log(userList);
-
-      let search = "Admin".toLowerCase().replace(/\s/g, "");
-
-      userList.forEach((user, index) => {
-        let typeOfUser = user.type_of_user;
-        let fullName = `${user.first_name}${user.middle_name}${user.last_name}`;
-        let sex = user.sex;
-
-        if (
-          typeOfUser
-            .toLowerCase()
-            .replace(/\s/g, "")
-            .substring(0, search.length) == search ||
-          fullName.toLowerCase().substring(0, search.length) == search ||
-          sex.toLowerCase().substring(0, search.length) == search
-        ) {
-          console.log(typeOfUser.split(""));
-          console.log(user.user_id);
-          console.log(user.first_name);
-          console.log(user.middle_name);
-          console.log(user.last_name);
-          console.log(user.birthday);
-          console.log(user.sex);
-          console.log(user.time_of_creation);
-          console.log(user.date_of_creation);
-        } else {
-          console.log("None");
-        }
-      });
-
       if (userList != "") {
-        for (let user in userList) {
-          let userId = userList[user].user_id;
-          let typeOfUser = userList[user].type_of_user;
-          let firstName = userList[user].first_name;
-          let middleName = userList[user].middle_name;
-          let lastName = userList[user].last_name;
-          let sex = userList[user].sex;
-          let birthday = userList[user].birthday;
-          let timeOfCreation = userList[user].time_of_creation;
-          let dateOfCreation = userList[user].date_of_creation;
+        userList.forEach((user, index) => {
+          let userId = user.user_id;
+          let typeOfUser = user.type_of_user;
+          let fullName = `${user.first_name} ${user.middle_name.substring(
+            0,
+            1
+          )}. ${user.last_name}`;
+          let sex = user.sex;
+          let birthday = user.birthday;
+          let timeOfCreation = user.time_of_creation;
+          let dateOfCreation = user.date_of_creation;
 
-          tableData += `
-            <tr>
-            <td>${typeOfUser}</td>
-            <td>${firstName} ${middleName} ${lastName}</td>
-            <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
-            <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
-            </tr>
-            `;
-        }
-
+          tableData += `<tr>
+        <td>${typeOfUser}</td>
+        <td>${fullName}</td>
+        <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+        <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+        </tr>`;
+        });
         tableContent = `${tableHeader}${tableData}`;
         table.innerHTML = `${tableContent}`;
         tableNotificationContainer.innerHTML = ``;
