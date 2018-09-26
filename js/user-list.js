@@ -295,7 +295,7 @@ function createUser() {
 
     createUserInputValues.forEach((input, index) => {
       let label = input.previousElementSibling.innerHTML;
-      let regex = /^[a-zA-Z]+$/;
+      let regex = /\d/;
       if (input.value == "") {
         notification("error", `${label} is empty`);
       } else {
@@ -303,7 +303,7 @@ function createUser() {
       }
 
       if (index <= 2) {
-        if (!input.value.match(regex)) {
+        if (regex.test(input.value)) {
           notification("error", `${label} is not valid`);
         } else {
           validName++;
@@ -442,66 +442,6 @@ function addSearchIcon() {
   }
 }
 
-// function searchUser() {
-//   let searchNotification = `
-//   <h1><i class="far fa-frown-open fa-3x"></i> User doesn't exist.</h1>`;
-//   let tableHeader = `<tr>
-//   <th>Type of User</th>
-//   <th>Name</th>
-//   <th>Edit</th>
-//   <th>Delete</th>
-//   `;
-//   let tableData = "";
-//   let tableContent = "";
-//   let search = searchSection.value;
-//   let searchUser = true;
-//   let searchUserDatas = new FormData();
-
-//   searchUserDatas.append("searchUser", searchUser);
-//   searchUserDatas.append("user", search);
-
-//   let xhr = new XMLHttpRequest();
-//   xhr.open("POST", "../php/search-user.php");
-//   xhr.onload = function() {
-//     if (this.status == 200) {
-//       let userList = JSON.parse(this.responseText);
-
-//       if (userList != "") {
-//         for (let user in userList) {
-//           let userId = userList[user].user_id;
-//           let typeOfUser = userList[user].type_of_user;
-//           let firstName = userList[user].first_name;
-//           let middleName = userList[user].middle_name;
-//           let lastName = userList[user].last_name;
-//           let sex = userList[user].sex;
-//           let birthday = userList[user].birthday;
-//           let timeOfCreation = userList[user].time_of_creation;
-//           let dateOfCreation = userList[user].date_of_creation;
-
-//           tableData += `
-//               <tr>
-//               <td>${typeOfUser}</td>
-//               <td>${firstName} ${middleName} ${lastName}</td>
-//               <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
-//               <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
-//               </tr>
-//               `;
-//         }
-
-//         tableContent = `${tableHeader}${tableData}`;
-//         table.innerHTML = `${tableContent}`;
-//         tableNotificationContainer.innerHTML = ``;
-//       } else {
-//         tableNotificationContainer.innerHTML = `${searchNotification}`;
-//         tableContent = `${tableHeader}`;
-//         table.innerHTML = `${tableContent}`;
-//       }
-//     }
-//   };
-
-//   xhr.send(searchUserDatas);
-// }
-
 function searchUser() {
   let getUserData = new FormData();
   let getUser = true;
@@ -531,6 +471,11 @@ function searchUser() {
         let firstName = user.first_name;
         let middleName = user.middle_name;
         let lastName = user.last_name;
+        let fullNameSearchWithFullMiddleName = `${firstName}${middleName}${lastName}`;
+        let fullNameSearchWithOutFullMiddleName = `${firstName}${middleName.substring(
+          0,
+          1
+        )}.${lastName}`;
         let birthday = user.birthday;
         let sex = user.sex;
         let timeOfCreation = user.date_of_creation;
@@ -542,19 +487,27 @@ function searchUser() {
             .replace(/\s/g, "")
             .substring(0, search.length) == search ||
           firstName.toLowerCase().substring(0, search.length) == search ||
+          firstName.toLowerCase().indexOf(search) > -1 ||
           middleName.toLowerCase().substring(0, search.length) == search ||
           lastName.toLowerCase().substring(0, search.length) == search ||
+          fullNameSearchWithFullMiddleName
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .substring(0, search.length) == search ||
+          fullNameSearchWithOutFullMiddleName
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .substring(0, search.length) == search ||
           sex.toLowerCase().substring(0, search.length) == search
         ) {
-          let fullName = `${firstName} ${middleName.substring(
-            0,
-            1
-          )}. ${lastName}`;
+          let fullName = `${firstName} ${middleName
+            .substring(0, 1)
+            .toUpperCase()}. ${lastName}`;
           tableData += `<tr>
               <td>${typeOfUser}</td>
               <td>${fullName}</td>
               <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
-              <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+              <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
               </tr>`;
         }
       });
@@ -603,20 +556,20 @@ function insertDataToTable() {
         userList.forEach((user, index) => {
           let userId = user.user_id;
           let typeOfUser = user.type_of_user;
-          let fullName = `${user.first_name} ${user.middle_name.substring(
-            0,
-            1
-          )}. ${user.last_name}`;
+          let firstName = user.first_name;
+          let fullName = `${user.first_name} ${user.middle_name
+            .substring(0, 1)
+            .toUpperCase()}. ${user.last_name}`;
           let sex = user.sex;
           let birthday = user.birthday;
           let timeOfCreation = user.time_of_creation;
           let dateOfCreation = user.date_of_creation;
-
+          let userInformation = [typeOfUser];
           tableData += `<tr>
         <td>${typeOfUser}</td>
         <td>${fullName}</td>
         <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
-        <td><i onclick="deleteUser(${userId})" class="fas fa-trash"></i></td>
+        <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
         </tr>`;
         });
         tableContent = `${tableHeader}${tableData}`;
@@ -638,8 +591,34 @@ function editUser(userId) {
   console.log(userId);
 }
 
+function showDeleteUserModal(userId, typeOfUser, firstName) {
+  addOpacityOnHeaderMainFooter();
+  let deleteUserModal = document.createElement("section");
+  deleteUserModal.setAttribute("class", "modal-container");
+  deleteUserModal.innerHTML = `<div class="modal delete-user">
+  <div class="modal-content">
+          <div class="delete-user-container">
+              <div class="delete-user-title">
+                  <h1>Delete ${typeOfUser} ${firstName}?</h1>
+              </div>
+              <div class="delete-decide-buttons-container">
+                  <div class="delete-decide-buttons">
+                      <button onclick="deleteUser(${userId})">Yes</button>
+                      <button onclick="closeModal()">No</button>
+                  </div>
+              </div>
+          </div>
+  </div>
+</div>`;
+  body.insertBefore(deleteUserModal, header);
+  deleteUserModal.style.display = "flex";
+  addModalOpacity();
+}
+
 // Function for deleting user
 function deleteUser(userId) {
+  closeModal();
+
   let userIdToDelete = new FormData();
   let deleteUserStatus = true;
 
@@ -650,7 +629,11 @@ function deleteUser(userId) {
   xhr.open("POST", "../php/delete-user.php");
   xhr.onload = function() {
     if (this.status == 200) {
-      insertDataToTable();
+      showLoader(
+        "delete-user",
+        "Deleting User...",
+        "User successfully deleted"
+      );
     }
   };
 
@@ -798,7 +781,9 @@ function removeModalElement() {
   removeOpacityOnHeaderMainFooter();
   setTimeout(() => {
     let modal = document.querySelector(".modal-container");
-    document.body.removeChild(modal);
+    try {
+      document.body.removeChild(modal);
+    } catch {}
   }, 200);
 }
 
@@ -905,6 +890,12 @@ function removeSpinningLoaderElement(
 
   if (processName == "create-user") {
     insertDataToTable();
+  } else if (processName == "delete-user") {
+    insertDataToTable();
+    if (searchSection.value != "") {
+      searchSection.value = "";
+      addSearchIcon();
+    }
   }
   removeOpacityOnHeaderMainFooter();
   return new Promise((resolve, reject) => {
