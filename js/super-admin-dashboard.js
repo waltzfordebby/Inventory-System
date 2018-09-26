@@ -298,7 +298,7 @@ function createUser() {
 
     createUserInputValues.forEach((input, index) => {
       let label = input.previousElementSibling.innerHTML;
-      let regex = /^[a-zA-Z]+$/;
+      let regex = /\d/;
       if (input.value == "") {
         notification("error", `${label} is empty`);
       } else {
@@ -306,7 +306,7 @@ function createUser() {
       }
 
       if (index <= 2) {
-        if (!input.value.match(regex)) {
+        if (regex.test(input.value)) {
           notification("error", `${label} is not valid`);
         } else {
           validName++;
