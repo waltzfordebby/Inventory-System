@@ -365,7 +365,7 @@ function createUser() {
             ) {
               setTimeout(() => {
                 notification("error", `Account already exist`);
-              }, 5);
+              }, 1);
               duplicateStatus++;
             }
           });
