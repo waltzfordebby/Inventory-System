@@ -330,87 +330,123 @@ function createUser() {
 
   // If validation returns true add users info to database
   if (validateCreateUserInfos() == true) {
-    showLoader(
-      "create-user",
-      "Creating User...",
-      "User creation is successful"
-    );
+    validateDuplicate();
 
-    // Create the formdata variable name
-    createUserDetailsTitles.forEach((title, index) => {
-      tableColumnTitles[index] = title.innerHTML
-        .split(" ")
-        .map(
-          (word, index) =>
-            index > 0
-              ? word.substr(0, 1).toUpperCase() + word.substring(1)
-              : word.substr(0, 1).toLowerCase() + word.substring(1)
-        )
-        .join("");
-    });
+    function validateDuplicate() {
+      let getUserData = new FormData();
+      let getUser = true;
+      let inputUserFullName = "";
+      let getUserFullName = "";
+      getUserData.append("getUser", getUser);
+      var duplicateStatus = 0;
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/user-list.php");
+      xhr.onload = function() {
+        if (this.status == 200) {
+          let userList = JSON.parse(this.responseText);
 
-    // Create the input field value
-    createUserInputValues.forEach((input, index) => {
-      let label = input.previousElementSibling.innerHTML;
-      let labelToArrayKey = label
-        .split(" ")
-        .map(
-          (word, index) =>
-            index > 0
-              ? word.substr(0, 1).toUpperCase() + word.substring(1)
-              : word.substr(0, 1).toLowerCase() + word.substring(1)
-        )
-        .join("");
+          createUserInputValues.forEach((input, index) => {
+            if (index < 3) {
+              inputUserFullName += input.value;
+            }
+          });
 
-      inputWithLabel[labelToArrayKey] = input.value;
-    });
+          userList.forEach((user, index) => {
+            getUserFullName = `${user.first_name}${user.middle_name}${
+              user.last_name
+            }`;
 
-    // Create the select field value
-    createUserSelectValues.forEach((select, index) => {
-      let label = select.previousElementSibling.innerHTML;
-      let labelToArrayKey = label
-        .split(" ")
-        .map(
-          (word, index) =>
-            index > 0
-              ? word.substr(0, 1).toUpperCase() + word.substring(1)
-              : word.substr(0, 1).toLowerCase() + word.substring(1)
-        )
-        .join("");
-      selectWithLabel[labelToArrayKey] = select.value;
-    });
+            if (
+              getUserFullName.replace(/\s/g, "").toLowerCase() ==
+              inputUserFullName.replace(/\s/g, "").toLowerCase()
+            ) {
+              setTimeout(() => {
+                notification("error", `Account already exist`);
+              }, 5);
+              duplicateStatus++;
+            }
+          });
 
-    // Merge input with label and select with label
-    mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
+          if (duplicateStatus == 0) {
+            init();
+          }
+        }
+      };
 
-    // Append the data of user to createUserData to send it to database
-    tableColumnTitles.forEach(title => {
-      createUserData.append(title, mergeTwoFields[title]);
-    });
+      xhr.send(getUserData);
+    }
 
-    // Append the sendCreateUserData to createUserData to process adding to database
-    createUserData.append("sendCreateUserData", sendCreateUserData);
-
-    // For debugging
-    // console.log(tableColumnTitles);
-    // console.log(inputWithLabel);
-    // console.log(selectWithLabel);
-    // console.log(mergeTwoFields);
-
-    // Output create user data
-    // for (var pair of createUserData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "../php/create-user.php", true);
-
-    xhr.onload = function() {
-      if (this.status == 200) {
-      }
-    };
-
-    xhr.send(createUserData);
+    function init() {
+      showLoader(
+        "create-user",
+        "Creating User...",
+        "User creation is successful"
+      );
+      // Create the formdata variable name
+      createUserDetailsTitles.forEach((title, index) => {
+        tableColumnTitles[index] = title.innerHTML
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+      });
+      // Create the input field value
+      createUserInputValues.forEach((input, index) => {
+        let label = input.previousElementSibling.innerHTML;
+        let labelToArrayKey = label
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+        inputWithLabel[labelToArrayKey] = input.value;
+      });
+      // Create the select field value
+      createUserSelectValues.forEach((select, index) => {
+        let label = select.previousElementSibling.innerHTML;
+        let labelToArrayKey = label
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+        selectWithLabel[labelToArrayKey] = select.value;
+      });
+      // Merge input with label and select with label
+      mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
+      // Append the data of user to createUserData to send it to database
+      tableColumnTitles.forEach(title => {
+        createUserData.append(title, mergeTwoFields[title]);
+      });
+      // Append the sendCreateUserData to createUserData to process adding to database
+      createUserData.append("sendCreateUserData", sendCreateUserData);
+      // For debugging
+      // console.log(tableColumnTitles);
+      // console.log(inputWithLabel);
+      // console.log(selectWithLabel);
+      // console.log(mergeTwoFields);
+      // Output create user data
+      // for (var pair of createUserData.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/create-user.php", true);
+      xhr.onload = function() {
+        if (this.status == 200) {
+        }
+      };
+      xhr.send(createUserData);
+    }
   }
 }
 
