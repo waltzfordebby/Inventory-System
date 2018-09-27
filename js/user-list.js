@@ -255,6 +255,7 @@ function createUser() {
   const inputWithLabel = {};
   const selectWithLabel = {};
   let mergeTwoFields = {};
+  let duplicateStatus = 0;
 
   let createUserDetailsTitles = document.querySelectorAll(
     ".create-user-input-fields label"
@@ -266,66 +267,126 @@ function createUser() {
     ".create-user-input-fields select"
   );
 
-  // Function for validating create user infos
-  function validateCreateUserInfos() {
-    let numberOfNotEmpty = 0;
-    let validName = 0;
-    let status = false;
-    let birthdayStatus = true;
+  async function init() {
+    await validateDuplicate();
+    await validateCreateUserInfos();
+  }
 
-    // Function for validating birthday
-    function validateBirthday(birthday) {
-      let date = new Date();
-      let year = date.getFullYear();
-      let birthdayKey = ["Year", "Month", "Day"];
-      let birthdayArray = birthday.split("-");
-      let birthdayMap = {};
+  init();
 
-      birthdayArray.forEach((value, index) => {
-        birthdayMap[birthdayKey[index]] = value;
-      });
+  // Function for validating if the use is duplicate
+  function validateDuplicate() {
+    return new Promise((resolve, reject) => {
+      let getUser = true;
+      let getUserData = new FormData();
+      let userInputFullname = "";
+      let getFullName = createUserInputValues.forEach(
+        input =>
+          (userInputFullname += input.value.toLowerCase().replace(/\s/g, ""))
+      );
 
-      if (birthdayMap.Year <= 1800) {
-        birthdayStatus = false;
-      } else {
-        birthdayStatus = true;
-      }
-      return birthdayStatus;
-    }
+      getUserData.append("getUser", getUser);
 
-    createUserInputValues.forEach((input, index) => {
-      let label = input.previousElementSibling.innerHTML;
-      let regex = /\d/;
-      if (input.value == "") {
-        notification("error", `${label} is empty`);
-      } else {
-        numberOfNotEmpty++;
-      }
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/user-list.php");
+      xhr.onload = function() {
+        if (this.status == 200) {
+          let userList = JSON.parse(this.responseText);
 
-      if (index <= 2) {
-        if (regex.test(input.value)) {
-          notification("error", `${label} is not valid`);
-        } else {
-          validName++;
+          userList.forEach((user, index) => {
+            let fullName = `${user.first_name
+              .toLowerCase()
+              .replace(/\s/g, "")}${user.middle_name
+              .toLowerCase()
+              .replace(/\s/g, "")}${user.last_name
+              .toLowerCase()
+              .replace(/\s/g, "")}`;
+
+            if (fullName == userInputFullname) {
+              console.log("Exist");
+              notification("error", `Test is empty`);
+            }
+          });
         }
-      }
+      };
 
-      if (index == createUserInputValues.length - 1) {
-        if (validateBirthday(input.value) == false) {
-          notification("error", `Invalid birthday`);
-        }
+      xhr.send(getUserData);
+      const error = false;
+      if (!error) {
+        resolve();
+      } else {
+        reject("Error: Something went wrong on validate if duplicate");
       }
     });
+  }
 
-    if (
-      numberOfNotEmpty == createUserInputValues.length &&
-      birthdayStatus == true &&
-      validName == 3
-    ) {
-      status = true;
-    }
+  // Function for validating create user infos
+  function validateCreateUserInfos() {
+    return new Promise((resolve, reject) => {
+      let numberOfNotEmpty = 0;
+      let validName = 0;
+      let status = false;
+      let birthdayStatus = true;
 
-    return status;
+      // Function for validating birthday
+      function validateBirthday(birthday) {
+        let date = new Date();
+        let year = date.getFullYear();
+        let birthdayKey = ["Year", "Month", "Day"];
+        let birthdayArray = birthday.split("-");
+        let birthdayMap = {};
+
+        birthdayArray.forEach((value, index) => {
+          birthdayMap[birthdayKey[index]] = value;
+        });
+
+        if (birthdayMap.Year <= 1800) {
+          birthdayStatus = false;
+        } else {
+          birthdayStatus = true;
+        }
+        return birthdayStatus;
+      }
+
+      createUserInputValues.forEach((input, index) => {
+        let label = input.previousElementSibling.innerHTML;
+        let regex = /\d/;
+        if (input.value == "") {
+          notification("error", `${label} is empty`);
+        } else {
+          numberOfNotEmpty++;
+        }
+
+        if (index <= 2) {
+          if (regex.test(input.value)) {
+            notification("error", `${label} is not valid`);
+          } else {
+            validName++;
+          }
+        }
+
+        if (index == createUserInputValues.length - 1) {
+          if (validateBirthday(input.value) == false) {
+          }
+        }
+      });
+
+      if (
+        numberOfNotEmpty == createUserInputValues.length &&
+        birthdayStatus == true &&
+        validName == 3
+      ) {
+        status = true;
+      }
+
+      return status;
+      const error = false;
+      if (!error) {
+        resolve();
+      } else {
+        reject("Error: Something went wrong on validate user input");
+      }
+    });
   }
 
   // If validation returns true add users info to database
