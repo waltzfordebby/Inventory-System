@@ -252,8 +252,8 @@ function showcreateUserModal() {
 
 // Function for creating user
 function createUser() {
-  let sendCreateUserData = true;
-  let createUserData = new FormData();
+  let sendDatas = true;
+  let Datas = new FormData();
   let tableColumnTitles = [];
   const inputWithLabel = {};
   const selectWithLabel = {};
@@ -405,7 +405,21 @@ function createUser() {
                 : word.substr(0, 1).toLowerCase() + word.substring(1)
           )
           .join("");
-        inputWithLabel[labelToArrayKey] = input.value;
+        inputWithLabel[labelToArrayKey] =
+          index < 3
+            ? input.value.indexOf(" ") == -1
+              ? input.value.substring(0, 1).toUpperCase() +
+                input.value.substring(1, input.value.length)
+              : input.value
+                  .split(" ")
+                  .map(
+                    word =>
+                      `${word.substring(0, 1).toUpperCase()}${word.substring(
+                        1
+                      )}`
+                  )
+                  .join(" ")
+            : input.value;
       });
       // Create the select field value
       createUserSelectValues.forEach((select, index) => {
@@ -423,19 +437,19 @@ function createUser() {
       });
       // Merge input with label and select with label
       mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
-      // Append the data of user to createUserData to send it to database
+      // Append the data of user to Datas to send it to database
       tableColumnTitles.forEach(title => {
-        createUserData.append(title, mergeTwoFields[title]);
+        Datas.append(title, mergeTwoFields[title]);
       });
-      // Append the sendCreateUserData to createUserData to process adding to database
-      createUserData.append("sendCreateUserData", sendCreateUserData);
+      // Append the sendDatas to Datas to process adding to database
+      Datas.append("sendDatas", sendDatas);
       // For debugging
       // console.log(tableColumnTitles);
       // console.log(inputWithLabel);
       // console.log(selectWithLabel);
       // console.log(mergeTwoFields);
       // Output create user data
-      // for (var pair of createUserData.entries()) {
+      // for (var pair of Datas.entries()) {
       //   console.log(pair[0] + ", " + pair[1]);
       // }
       let xhr = new XMLHttpRequest();
@@ -444,7 +458,7 @@ function createUser() {
         if (this.status == 200) {
         }
       };
-      xhr.send(createUserData);
+      xhr.send(Datas);
     }
   }
 }

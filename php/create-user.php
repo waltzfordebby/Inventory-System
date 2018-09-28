@@ -3,7 +3,7 @@
 require_once('database-connection.php');
 
 // Confirm if the create user data is being sent
-if(isset($_POST['sendCreateUserData'])){
+if(isset($_POST['sendDatas'])){
    
     // Variable for type of user
     if(isset($_POST['typeOfUser'])){

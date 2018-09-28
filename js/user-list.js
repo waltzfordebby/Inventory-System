@@ -247,207 +247,8 @@ function showcreateUserModal() {
   addModalOpacity();
 }
 
-// Function for creating user
 function createUser() {
-  let sendCreateUserData = true;
-  let createUserData = new FormData();
-  let tableColumnTitles = [];
-  const inputWithLabel = {};
-  const selectWithLabel = {};
-  let mergeTwoFields = {};
-
-  let createUserDetailsTitles = document.querySelectorAll(
-    ".create-user-input-fields label"
-  );
-  let createUserInputValues = document.querySelectorAll(
-    ".create-user-input-fields input"
-  );
-  let createUserSelectValues = document.querySelectorAll(
-    ".create-user-input-fields select"
-  );
-
-  // Function for validating create user infos
-  function validateCreateUserInfos() {
-    let numberOfNotEmpty = 0;
-    let validName = 0;
-    let status = false;
-    let birthdayStatus = true;
-
-    // Function for validating birthday
-    function validateBirthday(birthday) {
-      let date = new Date();
-      let year = date.getFullYear();
-      let birthdayKey = ["Year", "Month", "Day"];
-      let birthdayArray = birthday.split("-");
-      let birthdayMap = {};
-
-      birthdayArray.forEach((value, index) => {
-        birthdayMap[birthdayKey[index]] = value;
-      });
-
-      if (birthdayMap.Year <= 1800) {
-        birthdayStatus = false;
-      } else {
-        birthdayStatus = true;
-      }
-      return birthdayStatus;
-    }
-
-    createUserInputValues.forEach((input, index) => {
-      let label = input.previousElementSibling.innerHTML;
-      let regex = /\d/;
-      if (input.value == "") {
-        notification("error", `${label} is empty`);
-      } else {
-        numberOfNotEmpty++;
-      }
-
-      if (index <= 2) {
-        if (regex.test(input.value)) {
-          notification("error", `${label} is not valid`);
-        } else {
-          validName++;
-        }
-      }
-
-      if (index == createUserInputValues.length - 1) {
-        if (validateBirthday(input.value) == false) {
-          notification("error", `Invalid birthday`);
-        }
-      }
-    });
-
-    if (
-      numberOfNotEmpty == createUserInputValues.length &&
-      birthdayStatus == true &&
-      validName == 3
-    ) {
-      status = true;
-    }
-
-    return status;
-  }
-
-  // If validation returns true add users info to database
-  if (validateCreateUserInfos() == true) {
-    validateDuplicate();
-
-    function validateDuplicate() {
-      let getUserData = new FormData();
-      let getUser = true;
-      let inputUserFullName = "";
-      let getUserFullName = "";
-      getUserData.append("getUser", getUser);
-      var duplicateStatus = 0;
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/user-list.php");
-      xhr.onload = function() {
-        if (this.status == 200) {
-          let userList = JSON.parse(this.responseText);
-
-          createUserInputValues.forEach((input, index) => {
-            if (index < 3) {
-              inputUserFullName += input.value;
-            }
-          });
-
-          userList.forEach((user, index) => {
-            getUserFullName = `${user.first_name}${user.middle_name}${
-              user.last_name
-            }`;
-
-            if (
-              getUserFullName.replace(/\s/g, "").toLowerCase() ==
-              inputUserFullName.replace(/\s/g, "").toLowerCase()
-            ) {
-              setTimeout(() => {
-                notification("error", `Account already exist`);
-              }, 1);
-              duplicateStatus++;
-            }
-          });
-
-          if (duplicateStatus == 0) {
-            init();
-          }
-        }
-      };
-
-      xhr.send(getUserData);
-    }
-
-    function init() {
-      showLoader(
-        "create-user",
-        "Creating User...",
-        "User creation is successful"
-      );
-      // Create the formdata variable name
-      createUserDetailsTitles.forEach((title, index) => {
-        tableColumnTitles[index] = title.innerHTML
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-      });
-      // Create the input field value
-      createUserInputValues.forEach((input, index) => {
-        let label = input.previousElementSibling.innerHTML;
-        let labelToArrayKey = label
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-        inputWithLabel[labelToArrayKey] = input.value;
-      });
-      // Create the select field value
-      createUserSelectValues.forEach((select, index) => {
-        let label = select.previousElementSibling.innerHTML;
-        let labelToArrayKey = label
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-        selectWithLabel[labelToArrayKey] = select.value;
-      });
-      // Merge input with label and select with label
-      mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
-      // Append the data of user to createUserData to send it to database
-      tableColumnTitles.forEach(title => {
-        createUserData.append(title, mergeTwoFields[title]);
-      });
-      // Append the sendCreateUserData to createUserData to process adding to database
-      createUserData.append("sendCreateUserData", sendCreateUserData);
-      // For debugging
-      // console.log(tableColumnTitles);
-      // console.log(inputWithLabel);
-      // console.log(selectWithLabel);
-      // console.log(mergeTwoFields);
-      // Output create user data
-      // for (var pair of createUserData.entries()) {
-      //   console.log(pair[0] + ", " + pair[1]);
-      // }
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/create-user.php", true);
-      xhr.onload = function() {
-        if (this.status == 200) {
-        }
-      };
-      xhr.send(createUserData);
-    }
-  }
+  sendDataToDatabase("createUser");
 }
 
 // Logout
@@ -542,7 +343,7 @@ function searchUser() {
           tableData += `<tr>
               <td>${typeOfUser}</td>
               <td>${fullName}</td>
-              <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+              <td><i onclick="showUpdateUser('${userId}','${typeOfUser}','${firstName}','${middleName}','${lastName}','${sex}','${birthday}')" class="fas fa-user-edit"></i></td>
               <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
               </tr>`;
         }
@@ -593,6 +394,8 @@ function insertDataToTable() {
           let userId = user.user_id;
           let typeOfUser = user.type_of_user;
           let firstName = user.first_name;
+          let middleName = user.middle_name;
+          let lastName = user.last_name;
           let fullName = `${user.first_name} ${user.middle_name
             .substring(0, 1)
             .toUpperCase()}. ${user.last_name}`;
@@ -600,11 +403,10 @@ function insertDataToTable() {
           let birthday = user.birthday;
           let timeOfCreation = user.time_of_creation;
           let dateOfCreation = user.date_of_creation;
-          let userInformation = [typeOfUser];
           tableData += `<tr>
         <td>${typeOfUser}</td>
         <td>${fullName}</td>
-        <td><i onclick="editUser(${userId})" class="fas fa-user-edit"></i></td>
+        <td><i onclick="showUpdateUser('${userId}','${typeOfUser}','${firstName}','${middleName}','${lastName}','${sex}','${birthday}')" class="fas fa-user-edit"></i></td>
         <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
         </tr>`;
         });
@@ -622,9 +424,91 @@ function insertDataToTable() {
   xhr.send(getUserData);
 }
 
+// Function that shows the edit user modal
+function showUpdateUser(
+  userId,
+  typeOfUser,
+  firstName,
+  middleName,
+  lastName,
+  sex,
+  birthday
+) {
+  let typeOfUserOptions = "";
+  let sexOptions = "";
+
+  if (sex == "male") {
+    sexOptions = `<option value="male" selected="selected">Male</option>
+    <option value="female">Female</option>`;
+  } else if (sex == "female") {
+    sexOptions = `<option value="male">Male</option>
+    <option value="female" selected="selected">Female</option>`;
+  }
+
+  if (typeOfUser == "Super Admin") {
+    typeOfUserOptions = `<option value="Super Admin selected="selected">Super Admin</option>
+    <option value="Admin" >Admin</option>
+    <option value="User">User</option>`;
+  } else if (typeOfUser == "Admin") {
+    typeOfUserOptions = `<option value="Super Admin>Super Admin</option>
+    <option value="Admin" selected="selected" selected="selected">Admin</option>
+    <option value="User">User</option>`;
+  } else if (typeOfUser == "User") {
+    typeOfUserOptions = `<option value="Super Admin>Super Admin</option>
+    <option value="Admin" selected="selected">Admin</option>
+    <option value="User" selected="selected">User</option>`;
+  }
+
+  addOpacityOnHeaderMainFooter();
+  let editUserModal = document.createElement("section");
+  editUserModal.setAttribute("class", "modal-container");
+  editUserModal.innerHTML = `
+  <div class="modal edit-user">
+            <div class="modal-content">
+                <div class="close-button">
+                    <button onclick="closeModal()"><i class="fas fa-times-circle fa-2x"></i></button>
+                </div>
+
+                <div class="edit-user-container">
+                    <div class="edit-user-content">
+                        <div class="edit-user-title">
+                            <h1><i class="fas fa-user-edit"></i> Edit User</h1>
+                        </div>
+
+                        <div class="edit-user-input-fields">
+                            <label>Type Of User</label>
+                            <select>
+                                ${typeOfUserOptions}
+                            </select>
+                            <label>First Name</label>
+                            <input type="text" value="${firstName}">
+                            <label>Middle Name</label>
+                            <input type="text" value="${middleName}">
+                            <label>Last Name</label>
+                            <input type="text" value="${lastName}">
+                            <label>Sex</label>
+                            <select>
+                                ${sexOptions}
+                            </select>
+                            <label>Birthday</label>
+                            <input type="date" value="${birthday}">
+                        </div>
+
+                        <div class="edit-user-submit-button">
+                            <button onclick="updateUser()">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+  body.insertBefore(editUserModal, header);
+  editUserModal.style.display = "flex";
+  addModalOpacity();
+}
+
 // Function for editing user
-function editUser(userId) {
-  console.log(userId);
+function updateUser() {
+  sendDataToDatabase("updateUser");
 }
 
 function showDeleteUserModal(userId, typeOfUser, firstName) {
@@ -946,4 +830,233 @@ function removeSpinningLoaderElement(
       }
     }, 2000);
   });
+}
+
+// Function for sending data to database
+function sendDataToDatabase(typeOfProcess) {
+  let sendDatas = true;
+  let Datas = new FormData();
+  let url = "";
+  let process = "";
+
+  if (typeOfProcess == "createUser") {
+    url = "../php/create-user.php";
+    process = ".create-user";
+  } else if (typeOfProcess == "updateUser") {
+    url = "../php/update-user.php";
+    process = ".edit-user";
+  }
+
+  let tableColumnTitles = [];
+  const inputWithLabel = {};
+  const selectWithLabel = {};
+  let mergeTwoFields = {};
+
+  let createUserDetailsTitles = document.querySelectorAll(
+    `${process}-input-fields label`
+  );
+  let createUserInputValues = document.querySelectorAll(
+    `${process}-input-fields input`
+  );
+  let createUserSelectValues = document.querySelectorAll(
+    `${process}-input-fields select`
+  );
+
+  // Function for validating create user infos
+  function validateCreateUserInfos() {
+    let numberOfNotEmpty = 0;
+    let validName = 0;
+    let status = false;
+    let birthdayStatus = true;
+
+    // Function for validating birthday
+    function validateBirthday(birthday) {
+      let date = new Date();
+      let year = date.getFullYear();
+      let birthdayKey = ["Year", "Month", "Day"];
+      let birthdayArray = birthday.split("-");
+      let birthdayMap = {};
+
+      birthdayArray.forEach((value, index) => {
+        birthdayMap[birthdayKey[index]] = value;
+      });
+
+      if (birthdayMap.Year <= 1800) {
+        birthdayStatus = false;
+      } else {
+        birthdayStatus = true;
+      }
+      return birthdayStatus;
+    }
+
+    createUserInputValues.forEach((input, index) => {
+      let label = input.previousElementSibling.innerHTML;
+      let regex = /\d/;
+      if (input.value == "") {
+        notification("error", `${label} is empty`);
+      } else {
+        numberOfNotEmpty++;
+      }
+
+      if (index <= 2) {
+        if (regex.test(input.value)) {
+          notification("error", `${label} is not valid`);
+        } else {
+          validName++;
+        }
+      }
+
+      if (index == createUserInputValues.length - 1) {
+        if (validateBirthday(input.value) == false) {
+          notification("error", `Invalid birthday`);
+        }
+      }
+    });
+
+    if (
+      numberOfNotEmpty == createUserInputValues.length &&
+      birthdayStatus == true &&
+      validName == 3
+    ) {
+      status = true;
+    }
+
+    return status;
+  }
+
+  // If validation returns true add users info to database
+  if (validateCreateUserInfos() == true) {
+    validateDuplicate();
+
+    function validateDuplicate() {
+      let getUserData = new FormData();
+      let getUser = true;
+      let inputUserFullName = "";
+      let getUserFullName = "";
+      getUserData.append("getUser", getUser);
+      var duplicateStatus = 0;
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "../php/user-list.php");
+      xhr.onload = function() {
+        if (this.status == 200) {
+          let userList = JSON.parse(this.responseText);
+
+          createUserInputValues.forEach((input, index) => {
+            if (index < 3) {
+              inputUserFullName += input.value;
+            }
+          });
+
+          userList.forEach((user, index) => {
+            getUserFullName = `${user.first_name}${user.middle_name}${
+              user.last_name
+            }`;
+
+            if (
+              getUserFullName.replace(/\s/g, "").toLowerCase() ==
+              inputUserFullName.replace(/\s/g, "").toLowerCase()
+            ) {
+              setTimeout(() => {
+                notification("error", `Account already exist`);
+              }, 1);
+              duplicateStatus++;
+            }
+          });
+
+          if (duplicateStatus == 0) {
+            init();
+          }
+        }
+      };
+
+      xhr.send(getUserData);
+    }
+
+    function init() {
+      showLoader(
+        "create-user",
+        "Creating User...",
+        "User creation is successful"
+      );
+      // Create the formdata variable name
+      createUserDetailsTitles.forEach((title, index) => {
+        tableColumnTitles[index] = title.innerHTML
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+      });
+      // Create the input field value
+      createUserInputValues.forEach((input, index) => {
+        let label = input.previousElementSibling.innerHTML;
+        let labelToArrayKey = label
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+        inputWithLabel[labelToArrayKey] =
+          index < 3
+            ? input.value.indexOf(" ") == -1
+              ? input.value.substring(0, 1).toUpperCase() +
+                input.value.substring(1, input.value.length)
+              : input.value
+                  .split(" ")
+                  .map(
+                    word =>
+                      `${word.substring(0, 1).toUpperCase()}${word.substring(
+                        1
+                      )}`
+                  )
+                  .join(" ")
+            : input.value;
+      });
+      // Create the select field value
+      createUserSelectValues.forEach((select, index) => {
+        let label = select.previousElementSibling.innerHTML;
+        let labelToArrayKey = label
+          .split(" ")
+          .map(
+            (word, index) =>
+              index > 0
+                ? word.substr(0, 1).toUpperCase() + word.substring(1)
+                : word.substr(0, 1).toLowerCase() + word.substring(1)
+          )
+          .join("");
+        selectWithLabel[labelToArrayKey] = select.value;
+      });
+      // Merge input with label and select with label
+      mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
+      // Append the data of user to Datas to send it to database
+      tableColumnTitles.forEach(title => {
+        Datas.append(title, mergeTwoFields[title]);
+      });
+      // Append the sendDatas to Datas to process adding to database
+      Datas.append("sendDatas", sendDatas);
+      // For debugging
+      // console.log(tableColumnTitles);
+      // console.log(inputWithLabel);
+      // console.log(selectWithLabel);
+      // console.log(mergeTwoFields);
+      // Output create user data
+      // for (var pair of Datas.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.onload = function() {
+        if (this.status == 200) {
+          console.log(this.responseText);
+        }
+      };
+      xhr.send(Datas);
+    }
+  }
 }
