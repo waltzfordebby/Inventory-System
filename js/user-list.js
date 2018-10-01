@@ -495,7 +495,7 @@ function showUpdateUser(
                         </div>
 
                         <div class="edit-user-submit-button">
-                            <button onclick="updateUser()">Update</button>
+                            <button onclick="updateUser(${userId})">Update</button>
                         </div>
                     </div>
                 </div>
@@ -507,8 +507,8 @@ function showUpdateUser(
 }
 
 // Function for editing user
-function updateUser() {
-  sendDataToDatabase("updateUser");
+function updateUser(userId) {
+  sendDataToDatabase("updateUser", userId);
 }
 
 function showDeleteUserModal(userId, typeOfUser, firstName) {
@@ -833,7 +833,7 @@ function removeSpinningLoaderElement(
 }
 
 // Function for sending data to database
-function sendDataToDatabase(typeOfProcess) {
+function sendDataToDatabase(typeOfProcess, userId = "") {
   let sendDatas = true;
   let Datas = new FormData();
   let url = "";
@@ -957,7 +957,11 @@ function sendDataToDatabase(typeOfProcess) {
               inputUserFullName.replace(/\s/g, "").toLowerCase()
             ) {
               setTimeout(() => {
-                notification("error", `Account already exist`);
+                if (typeOfProcess == "createUser") {
+                  notification("error", `Account already exist`);
+                } else if (typeOfProcess == "updateUser") {
+                  notification("error", `Account is up to date`);
+                }
               }, 1);
               duplicateStatus++;
             }
@@ -973,11 +977,20 @@ function sendDataToDatabase(typeOfProcess) {
     }
 
     function init() {
-      showLoader(
-        "create-user",
-        "Creating User...",
-        "User creation is successful"
-      );
+      if (typeOfProcess == "createUser") {
+        showLoader(
+          "create-user",
+          "Creating User...",
+          "User creation is successful"
+        );
+      } else if (typeOfProcess == "updateUser") {
+        showLoader(
+          "create-user",
+          "Updating User...",
+          "User update is successful"
+        );
+      }
+
       // Create the formdata variable name
       createUserDetailsTitles.forEach((title, index) => {
         tableColumnTitles[index] = title.innerHTML
@@ -1040,6 +1053,7 @@ function sendDataToDatabase(typeOfProcess) {
       });
       // Append the sendDatas to Datas to process adding to database
       Datas.append("sendDatas", sendDatas);
+      Datas.append("userId", userId);
       // For debugging
       // console.log(tableColumnTitles);
       // console.log(inputWithLabel);
