@@ -45,11 +45,18 @@ if(isset($_POST['sendDatas'])){
     // Set creation time
     $creation_time = date("h:i:s A");
 
-    $getMaxUserId = 'SELECT *FROM WHERE MAX(:userId)';
+
+      // $sql = 'SELECT * FROM posts WHERE id = :id';
+  // $stmt = $pdo->prepare($sql);
+  // $stmt->execute(['id' => $id]);
+  // $post = $stmt->fetch();
+    $getMaxUserId = 'SELECT MAX(user_id) AS maxUserId FROM user_accounts';
     $prepGetMaxUserId = $pdo->prepare($getMaxUserId);
-    $prepGetMaxUserId->execute(['userId'=>userId]);
+    $prepGetMaxUserId->execute();
     $maxUserId = $prepGetMaxUserId->fetch();
-    
+
+    $userNameNumber =  $maxUserId->maxUserId;
+
     $sql = 'INSERT INTO user_accounts (type_of_user, first_name, middle_name, last_name, sex, birthday, time_of_creation, date_of_creation) 
     VALUES (:type_of_user, :first_name, :middle_name, :last_name, :sex, :birthday, :creation_time, :creation_date)';
     
@@ -59,7 +66,8 @@ if(isset($_POST['sendDatas'])){
     'creation_time' => $creation_time, 'creation_date' => $creation_date]);
     
 
-    echo $maxUserId;
+
+    echo $userNameNumber;
 
 }
 
