@@ -45,29 +45,30 @@ if(isset($_POST['sendDatas'])){
     // Set creation time
     $creation_time = date("h:i:s A");
 
-
-      // $sql = 'SELECT * FROM posts WHERE id = :id';
-  // $stmt = $pdo->prepare($sql);
-  // $stmt->execute(['id' => $id]);
-  // $post = $stmt->fetch();
+    //For username and password 
     $getMaxUserId = 'SELECT MAX(user_id) AS maxUserId FROM user_accounts';
     $prepGetMaxUserId = $pdo->prepare($getMaxUserId);
     $prepGetMaxUserId->execute();
     $maxUserId = $prepGetMaxUserId->fetch();
 
-    $userNameNumber =  $maxUserId->maxUserId;
+    $userNameNumber =  $maxUserId->maxUserId + 1;
 
-    $sql = 'INSERT INTO user_accounts (type_of_user, first_name, middle_name, last_name, sex, birthday, time_of_creation, date_of_creation) 
-    VALUES (:type_of_user, :first_name, :middle_name, :last_name, :sex, :birthday, :creation_time, :creation_date)';
+    $typeOfUserUserPass =  preg_replace('/\s+/', '', $typeOfUser);
+
+
+    $userName = strtolower($typeOfUserUserPass).strtolower($lastName).$userNameNumber;
+    $rawPassword = $userName;
+    $passWord = md5($userName);
+
+    $sql = 'INSERT INTO user_accounts (type_of_user, first_name, middle_name, last_name, sex, birthday, time_of_creation, date_of_creation,
+     username, password,raw_password) 
+    VALUES (:type_of_user, :first_name, :middle_name, :last_name, :sex, :birthday, :creation_time, :creation_date,:username,:password,:raw_password)';
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['type_of_user' => $typeOfUser, 'first_name' => $firstName, 'middle_name' => $middleName, 
     'last_name' => $lastName, 'sex' => $sex, 'birthday' => $birthday,
-    'creation_time' => $creation_time, 'creation_date' => $creation_date]);
+    'creation_time' => $creation_time, 'creation_date' => $creation_date, 'username'=>$userName, 'password'=>$passWord,'raw_password'=>$rawPassword]);
     
-
-
-    echo $userNameNumber;
 
 }
 

@@ -342,7 +342,7 @@ function searchUser() {
             .toUpperCase()}. ${lastName}`;
           tableData += `<tr>
               <td>${typeOfUser}</td>
-              <td>${fullName}</td>
+              <td title="Click to view user info" onclick="viewUserInfo()">${fullName}</td>
               <td><i onclick="showUpdateUser('${userId}','${typeOfUser}','${firstName}','${middleName}','${lastName}','${sex}','${birthday}')" class="fas fa-user-edit"></i></td>
               <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
               </tr>`;
@@ -403,9 +403,15 @@ function insertDataToTable() {
           let birthday = user.birthday;
           let timeOfCreation = user.time_of_creation;
           let dateOfCreation = user.date_of_creation;
+          let updated = user.updated;
+          let userName = user.username;
+          let password = user.password;
+          let rawPassword = user.raw_password;
+          console.log(rawPassword);
+
           tableData += `<tr>
         <td>${typeOfUser}</td>
-        <td>${fullName}</td>
+        <td title="Click to view user info" onclick="viewUserInfo('${userId}','${typeOfUser}','${firstName}','${middleName}','${lastName}','${sex}','${birthday}','${timeOfCreation}','${dateOfCreation}','${updated}','${userName}','${password}','${rawPassword}')">${fullName}</td>
         <td><i onclick="showUpdateUser('${userId}','${typeOfUser}','${firstName}','${middleName}','${lastName}','${sex}','${birthday}')" class="fas fa-user-edit"></i></td>
         <td><i onclick="showDeleteUserModal('${userId}','${typeOfUser}','${firstName}')" class="fas fa-trash"></i></td>
         </tr>`;
@@ -570,8 +576,12 @@ function notification(
 ) {
   let errorClass = "";
   let container = document.querySelector(`${location}`);
-  let submitButton = document.querySelector(
+  let createSubmitButton = document.querySelector(
     ".create-user-submit-button button"
+  );
+
+  let editSubmitButton = document.querySelector(
+    ".edit-user-submit-button button"
   );
 
   // Set the of fontawesome icon
@@ -615,7 +625,10 @@ function notification(
         );
         notificationContainer.style.opacity = "0";
         try {
-          submitButton.blur();
+          createSubmitButton.blur();
+        } catch {}
+        try {
+          editSubmitButton.blur();
         } catch {}
         const error = false;
         if (!error) {
@@ -1073,4 +1086,61 @@ function sendDataToDatabase(typeOfProcess, userId = "") {
       xhr.send(Datas);
     }
   }
+}
+
+// View user information
+function viewUserInfo(
+  userId,
+  typeOfUser,
+  firstName,
+  middleName,
+  lastName,
+  sex,
+  birthday,
+  timeOfCreation,
+  dateOfCreation,
+  updated,
+  username,
+  password,
+  rawPassword
+) {
+  addOpacityOnHeaderMainFooter();
+  let userInformationModal = document.createElement("section");
+  userInformationModal.setAttribute("class", "modal-container");
+  userInformationModal.innerHTML = `
+  <div class="modal view-user">
+  <div class="modal-content">
+      <div class="close-button">
+          <button onclick="closeModal()"><i class="fas fa-times-circle fa-2x"></i></button>
+      </div>
+      <div class="view-user-container">
+          <div class="view-user-content">
+              <div class="view-user-title">
+                  <h1><i class="fas fa-user"></i> User Information</h1>
+              </div>
+
+              <div class="info-container">
+                  <ul>
+                      <li><span>Name:</span> ${firstName} ${middleName} ${lastName} </li>
+                      <li><span>User Id:</span> ${userId}</li>
+                      <li><span>Type of User:</span> ${typeOfUser} </li>
+                      <li><span>Sex:</span> ${sex
+                        .substring(0, 1)
+                        .toUpperCase() + sex.substring(1)} </li>
+                      <li><span>Birthday:</span>${birthday} </li>
+                      <li><span>Time of creation:</span> ${timeOfCreation} </li>
+                      <li><span>Date of creation:</span> ${dateOfCreation} </li>
+                      <li><span>Numbers of update:</span> ${updated} </li>
+                      <li><span>Username:</span>${username} </li>
+                      <li><span>Password:</span>${rawPassword} </li>
+                  </ul>
+              </div>
+
+          </div>
+      </div>
+  </div>
+</div>`;
+  body.insertBefore(userInformationModal, header);
+  userInformationModal.style.display = "flex";
+  addModalOpacity();
 }

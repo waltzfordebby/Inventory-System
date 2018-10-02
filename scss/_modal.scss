@@ -463,6 +463,79 @@ body {
           }
         }
       }
+
+      &.view-user {
+        height: 32rem;
+        width: 28rem;
+
+        .modal-content {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-row-gap: 1.5rem;
+
+          .close-button {
+            align-self: center;
+            justify-self: flex-end;
+
+            button {
+              margin: 0.3rem 0.2rem 0rem 0rem;
+              outline: none;
+              border: none;
+              background: none;
+
+              &:hover {
+                cursor: pointer;
+              }
+
+              &:focus {
+                @include make-bigger();
+              }
+            }
+          }
+
+          .view-user-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            .view-user-content {
+              display: grid;
+              grid-template-columns: 1fr repeat(2, minmax(auto, 14rem)) 1fr;
+              grid-row-gap: 1.5rem;
+
+              .view-user-title {
+                grid-column: 2/4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+
+              .info-container {
+                grid-column: 2/4;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+
+                ul {
+                  list-style: none;
+
+                  li {
+                    margin-bottom: 0.5rem;
+                    span {
+                      font-size: 1.1rem;
+                      font-weight: bold;
+                      margin-right: 1rem;
+                    }
+                    font-size: 1.2rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

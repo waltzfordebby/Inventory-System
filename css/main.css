@@ -847,6 +847,69 @@ body .modal-container .modal.delete-user .modal-content .delete-user-container .
   -moz-transfrom: scale(1.1);
   transform: scale(1.1);
 }
+body .modal-container .modal.view-user {
+  height: 32rem;
+  width: 28rem;
+}
+body .modal-container .modal.view-user .modal-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: 1.5rem;
+}
+body .modal-container .modal.view-user .modal-content .close-button {
+  align-self: center;
+  justify-self: flex-end;
+}
+body .modal-container .modal.view-user .modal-content .close-button button {
+  margin: 0.3rem 0.2rem 0rem 0rem;
+  outline: none;
+  border: none;
+  background: none;
+}
+body .modal-container .modal.view-user .modal-content .close-button button:hover {
+  cursor: pointer;
+}
+body .modal-container .modal.view-user .modal-content .close-button button:focus {
+  -webkit-transfrom: scale(1.1);
+  -moz-transfrom: scale(1.1);
+  transform: scale(1.1);
+}
+body .modal-container .modal.view-user .modal-content .view-user-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content {
+  display: grid;
+  grid-template-columns: 1fr repeat(2, minmax(auto, 14rem)) 1fr;
+  grid-row-gap: 1.5rem;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .view-user-title {
+  grid-column: 2/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container {
+  grid-column: 2/4;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul {
+  list-style: none;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
 
 body main .table-title {
   margin-bottom: 2rem;
@@ -910,6 +973,12 @@ body main .table-container table tbody tr td {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+}
+body main .table-container table tbody tr td:nth-child(2) {
+  cursor: pointer;
+}
+body main .table-container table tbody tr td:nth-child(2):hover {
+  font-weight: bold;
 }
 body main .table-container table tbody tr td:nth-child(3) {
   padding-right: 1.5rem;

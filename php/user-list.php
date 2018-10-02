@@ -7,7 +7,7 @@ if(isset($_POST['getUser'])){
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $userList = $stmt->fetchAll();
-    
+
     echo json_encode($userList);   
 }
 ?>
