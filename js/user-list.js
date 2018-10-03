@@ -407,7 +407,6 @@ function insertDataToTable() {
           let userName = user.username;
           let password = user.password;
           let rawPassword = user.raw_password;
-          console.log(rawPassword);
 
           tableData += `<tr>
         <td>${typeOfUser}</td>
@@ -1080,7 +1079,6 @@ function sendDataToDatabase(typeOfProcess, userId = "") {
       xhr.open("POST", url, true);
       xhr.onload = function() {
         if (this.status == 200) {
-          console.log(this.responseText);
         }
       };
       xhr.send(Datas);
@@ -1104,6 +1102,27 @@ function viewUserInfo(
   password,
   rawPassword
 ) {
+  let userBirthday;
+  let months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+
+  let rawBirthday = birthday.split("-");
+  userBirthday = `${months[rawBirthday[1] - 1]} ${rawBirthday[2]}, ${
+    rawBirthday[0]
+  }`;
+
   addOpacityOnHeaderMainFooter();
   let userInformationModal = document.createElement("section");
   userInformationModal.setAttribute("class", "modal-container");
@@ -1127,12 +1146,12 @@ function viewUserInfo(
                       <li><span>Sex:</span> ${sex
                         .substring(0, 1)
                         .toUpperCase() + sex.substring(1)} </li>
-                      <li><span>Birthday:</span>${birthday} </li>
+                      <li><span>Birthday:</span>${userBirthday} </li>
                       <li><span>Time of creation:</span> ${timeOfCreation} </li>
                       <li><span>Date of creation:</span> ${dateOfCreation} </li>
                       <li><span>Numbers of update:</span> ${updated} </li>
                       <li><span>Username:</span>${username} </li>
-                      <li><span>Password:</span>${rawPassword} </li>
+                      <li><span>Password:</span><span id="passwordContainer" onclick="showPassword('${rawPassword}')">View password</span></li>
                   </ul>
               </div>
 
@@ -1143,4 +1162,10 @@ function viewUserInfo(
   body.insertBefore(userInformationModal, header);
   userInformationModal.style.display = "flex";
   addModalOpacity();
+}
+
+function showPassword(rawPassword) {
+  let passwordContainer = document.querySelector("#passwordContainer");
+  passwordContainer.style.fontWeight = "normal";
+  passwordContainer.innerHTML = rawPassword;
 }

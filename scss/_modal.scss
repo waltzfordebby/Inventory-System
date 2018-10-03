@@ -523,10 +523,20 @@ body {
 
                   li {
                     margin-bottom: 0.5rem;
+
                     span {
-                      font-size: 1.1rem;
-                      font-weight: bold;
-                      margin-right: 1rem;
+                      &:nth-child(1) {
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        margin-right: 1rem;
+                      }
+
+                      &:nth-child(2) {
+                        cursor: pointer;
+                        &:hover {
+                          font-weight: bold;
+                        }
+                      }
                     }
                     font-size: 1.2rem;
                   }

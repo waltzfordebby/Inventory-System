@@ -43,7 +43,7 @@ if(isset($_POST['sendDatas'])){
     $creation_date = date("M j, Y");
     
     // Set creation time
-    $creation_time = date("h:i:s A");
+    $creation_time = date("h:i A");
 
     //For username and password 
     $getMaxUserId = 'SELECT MAX(user_id) AS maxUserId FROM user_accounts';

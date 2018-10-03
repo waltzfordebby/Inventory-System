@@ -905,10 +905,16 @@ body .modal-container .modal.view-user .modal-content .view-user-container .view
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
-body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span {
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span:nth-child(1) {
   font-size: 1.1rem;
   font-weight: bold;
   margin-right: 1rem;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span:nth-child(2) {
+  cursor: pointer;
+}
+body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span:nth-child(2):hover {
+  font-weight: bold;
 }
 
 body main .table-title {
