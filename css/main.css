@@ -916,6 +916,165 @@ body .modal-container .modal.view-user .modal-content .view-user-container .view
 body .modal-container .modal.view-user .modal-content .view-user-container .view-user-content .info-container ul li span:nth-child(2):hover {
   font-weight: bold;
 }
+body .modal-container .modal.add-item {
+  height: 33.5rem;
+  width: 70rem;
+}
+body .modal-container .modal.add-item .modal-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: 1.5rem;
+}
+body .modal-container .modal.add-item .modal-content .close-button {
+  align-self: center;
+  justify-self: flex-end;
+}
+body .modal-container .modal.add-item .modal-content .close-button button {
+  margin: 0.3rem 0.2rem 0rem 0rem;
+  outline: none;
+  border: none;
+  background: none;
+}
+body .modal-container .modal.add-item .modal-content .close-button button:hover {
+  cursor: pointer;
+}
+body .modal-container .modal.add-item .modal-content .close-button button:focus {
+  -webkit-transfrom: scale(1.1);
+  -moz-transfrom: scale(1.1);
+  transform: scale(1.1);
+}
+body .modal-container .modal.add-item .modal-content .add-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content {
+  display: grid;
+  grid-template-columns: 1fr repeat(2, minmax(auto, 40rem)) 1fr;
+  grid-row-gap: 1.5rem;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-title {
+  grid-column: 2/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container {
+  grid-column: 2/4;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-row-gap: 0.7rem;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields label {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields select {
+  padding: 0.4rem;
+  font-size: 1.1rem;
+  border-radius: 0.3rem;
+  border: 2px solid #136f63;
+  outline: none;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields select:focus {
+  border: 2px solid #364156;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields input {
+  padding: 0.4rem 0.5rem;
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 0.3rem;
+  border: 2px solid #136f63;
+  outline: none;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields input:focus {
+  border: 2px solid #364156;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields input[type=date] {
+  padding: 0.4rem 0.5rem;
+  font-size: 1.1rem;
+  text-align: left;
+  font-weight: bold;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields {
+  grid-column: 2/4;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-row-gap: 0.7rem;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields label {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields select {
+  padding: 0.4rem;
+  font-size: 1.1rem;
+  border-radius: 0.3rem;
+  border: 2px solid #136f63;
+  outline: none;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields select:focus {
+  border: 2px solid #364156;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input {
+  padding: 0.4rem 0.5rem;
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 0.3rem;
+  border: 2px solid #136f63;
+  outline: none;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input:focus {
+  border: 2px solid #364156;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input[type=date] {
+  padding: 0.4rem 0.5rem;
+  font-size: 1.1rem;
+  text-align: left;
+  font-weight: bold;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-submit-button {
+  grid-column: 2/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-submit-button button {
+  border-radius: 0.2rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  background: #acc12f;
+  border: none;
+  outline: none;
+}
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-submit-button button:focus {
+  -webkit-box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+  box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.13);
+  -webkit-transfrom: scale(1.1);
+  -moz-transfrom: scale(1.1);
+  transform: scale(1.1);
+}
 
 body main .table-title {
   margin-bottom: 2rem;

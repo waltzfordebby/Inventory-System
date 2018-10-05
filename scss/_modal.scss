@@ -546,6 +546,178 @@ body {
           }
         }
       }
+
+      &.add-item {
+        height: 33.5rem;
+        width: 70rem;
+
+        .modal-content {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-row-gap: 1.5rem;
+
+          .close-button {
+            align-self: center;
+            justify-self: flex-end;
+
+            button {
+              margin: 0.3rem 0.2rem 0rem 0rem;
+              outline: none;
+              border: none;
+              background: none;
+
+              &:hover {
+                cursor: pointer;
+              }
+
+              &:focus {
+                @include make-bigger();
+              }
+            }
+          }
+
+          .add-item-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            .add-item-content {
+              display: grid;
+              grid-template-columns: 1fr repeat(2, minmax(auto, 40rem)) 1fr;
+              grid-row-gap: 1.5rem;
+
+              .add-item-title {
+                grid-column: 2/4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+
+              .add-item-input-fields-container {
+                grid-column: 2/4;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+
+                .add-item-input-fields {
+                  display: grid;
+                  grid-template-columns: repeat(2, 1fr);
+                  grid-row-gap: 0.7rem;
+
+                  label {
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                  }
+
+                  select {
+                    padding: 0.4rem;
+                    font-size: 1.1rem;
+                    border-radius: 0.3rem;
+                    border: 2px solid #136f63;
+                    outline: none;
+
+                    &:focus {
+                      border: 2px solid #364156;
+                      @include point-twenty-transition();
+                    }
+                  }
+
+                  input {
+                    padding: 0.4rem 0.5rem;
+                    font-size: 1.1rem;
+                    text-align: center;
+                    border-radius: 0.3rem;
+                    border: 2px solid #136f63;
+                    outline: none;
+
+                    &:focus {
+                      border: 2px solid #364156;
+                      @include point-twenty-transition();
+                    }
+                  }
+
+                  input[type="date"] {
+                    padding: 0.4rem 0.5rem;
+                    font-size: 1.1rem;
+                    text-align: left;
+                    font-weight: bold;
+                  }
+                }
+              }
+
+              .add-item-input-fields {
+                grid-column: 2/4;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-row-gap: 0.7rem;
+
+                label {
+                  font-size: 1.1rem;
+                  font-weight: bold;
+                }
+
+                select {
+                  padding: 0.4rem;
+                  font-size: 1.1rem;
+                  border-radius: 0.3rem;
+                  border: 2px solid #136f63;
+                  outline: none;
+
+                  &:focus {
+                    border: 2px solid #364156;
+                    @include point-twenty-transition();
+                  }
+                }
+
+                input {
+                  padding: 0.4rem 0.5rem;
+                  font-size: 1.1rem;
+                  text-align: center;
+                  border-radius: 0.3rem;
+                  border: 2px solid #136f63;
+                  outline: none;
+
+                  &:focus {
+                    border: 2px solid #364156;
+                    @include point-twenty-transition();
+                  }
+                }
+
+                input[type="date"] {
+                  padding: 0.4rem 0.5rem;
+                  font-size: 1.1rem;
+                  text-align: left;
+                  font-weight: bold;
+                }
+              }
+
+              .add-item-submit-button {
+                grid-column: 2/4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                button {
+                  border-radius: 0.2rem;
+                  padding: 0.6rem;
+                  cursor: pointer;
+                  font-size: 1rem;
+                  font-weight: bold;
+                  background: $warning-color;
+                  border: none;
+                  outline: none;
+
+                  &:focus {
+                    @include box-shadow();
+                    @include make-bigger();
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

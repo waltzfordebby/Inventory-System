@@ -451,16 +451,16 @@ function showUpdateUser(
   }
 
   if (typeOfUser == "Super Admin") {
-    typeOfUserOptions = `<option value="Super Admin selected="selected">Super Admin</option>
+    typeOfUserOptions = `<option value="Super Admin" selected="selected">Super Admin</option>
     <option value="Admin" >Admin</option>
     <option value="User">User</option>`;
   } else if (typeOfUser == "Admin") {
-    typeOfUserOptions = `<option value="Super Admin>Super Admin</option>
-    <option value="Admin" selected="selected" selected="selected">Admin</option>
+    typeOfUserOptions = `<option value="Super Admin">Super Admin</option>
+    <option value="Admin" selected="selected">Admin</option>
     <option value="User">User</option>`;
   } else if (typeOfUser == "User") {
-    typeOfUserOptions = `<option value="Super Admin>Super Admin</option>
-    <option value="Admin" selected="selected">Admin</option>
+    typeOfUserOptions = `<option value="Super Admin">Super Admin</option>
+    <option value="Admin">Admin</option>
     <option value="User" selected="selected">User</option>`;
   }
 
@@ -944,6 +944,9 @@ function sendDataToDatabase(typeOfProcess, userId = "") {
       let getUserData = new FormData();
       let getUser = true;
       let inputUserFullName = "";
+      let birthdayInput;
+      let sexInput;
+      let typeOfUserInput;
       let getUserFullName = "";
       getUserData.append("getUser", getUser);
       var duplicateStatus = 0;
@@ -956,29 +959,56 @@ function sendDataToDatabase(typeOfProcess, userId = "") {
           createUserInputValues.forEach((input, index) => {
             if (index < 3) {
               inputUserFullName += input.value;
+            } else if (index == 3) {
+              birthdayInput = input.value;
             }
           });
 
-          userList.forEach((user, index) => {
-            getUserFullName = `${user.first_name}${user.middle_name}${
-              user.last_name
-            }`;
+          createUserSelectValues.forEach((select, index) => {
+            if (index == 0) {
+              typeOfUserInput = select.value;
+            } else if (index == 1) {
+              sexInput = select.value;
+            }
+          });
 
-            if (
-              getUserFullName.replace(/\s/g, "").toLowerCase() ==
-              inputUserFullName.replace(/\s/g, "").toLowerCase()
-            ) {
-              setTimeout(() => {
-                if (typeOfProcess == "createUser") {
-                  notification("error", `Account already exist`);
-                } else if (typeOfProcess == "updateUser") {
+          if (typeOfProcess == "updateUser") {
+            userList.forEach((user, index) => {
+              let getBirthday = user.birthday;
+              let getTypeOfUser = user.type_of_user;
+              let getSex = user.sex;
+              getUserFullName = `${user.first_name}${user.middle_name}${
+                user.last_name
+              }`;
+              if (
+                getUserFullName.replace(/\s/g, "").toLowerCase() ==
+                  inputUserFullName.replace(/\s/g, "").toLowerCase() &&
+                getBirthday == birthdayInput &&
+                getTypeOfUser == typeOfUserInput &&
+                getSex == sexInput
+              ) {
+                setTimeout(() => {
                   notification("error", `Account is up to date`);
-                }
-              }, 1);
-              duplicateStatus++;
-            }
-          });
-
+                }, 1);
+                duplicateStatus++;
+              }
+            });
+          } else {
+            userList.forEach((user, index) => {
+              getUserFullName = `${user.first_name}${user.middle_name}${
+                user.last_name
+              }`;
+              if (
+                getUserFullName.replace(/\s/g, "").toLowerCase() ==
+                inputUserFullName.replace(/\s/g, "").toLowerCase()
+              ) {
+                setTimeout(() => {
+                  notification("error", `Account already exist`);
+                }, 1);
+                duplicateStatus++;
+              }
+            });
+          }
           if (duplicateStatus == 0) {
             init();
           }
@@ -1149,7 +1179,6 @@ function viewUserInfo(
                       <li><span>Birthday:</span>${userBirthday} </li>
                       <li><span>Time of creation:</span> ${timeOfCreation} </li>
                       <li><span>Date of creation:</span> ${dateOfCreation} </li>
-                      <li><span>Numbers of update:</span> ${updated} </li>
                       <li><span>Username:</span>${username} </li>
                       <li><span>Password:</span><span id="passwordContainer" onclick="showPassword('${rawPassword}')">View password</span></li>
                   </ul>
