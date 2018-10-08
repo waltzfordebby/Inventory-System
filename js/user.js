@@ -1,53 +1,22 @@
 // Variables
+const showMenuButton = document.querySelector(".fa-caret-down");
 const body = document.querySelector("body");
+const menus = document.querySelector("nav aside");
+const logo = document.querySelector(".logo");
 const header = document.querySelector("header");
 const main = document.querySelector("main");
-const showMenuButton = document.querySelector(".fa-caret-down");
 const navigationMenus = document.querySelector("nav aside");
 const navigationMenusList = document.querySelectorAll("nav aside ul li");
-const dashboardMenus = document.querySelectorAll(
-  ".dashboard-menus-container div"
-);
+const dahshBoardMenus = document.querySelectorAll(".dashboard-menu");
 
-// Show  navigation menu button
-showMenuButton.addEventListener("click", showMenus);
-
-// Hide navigation menus on outside click
-document.addEventListener("click", event => {
-  if (
-    event.target.closest("nav aside") ||
-    event.target.closest(".fa-caret-down")
-  ) {
-    return;
-  } else if (!event.target.closest("nav aside")) {
-    navigationMenus.classList.remove("show");
-  }
-});
-
-// Hide navigation menu on pressing escape
-document.addEventListener("keyup", event => {
-  if (event.keyCode == 27) {
-    try {
-      navigationMenus.classList.remove("show");
-    } catch {}
-  }
-});
-
-// Navigation menu list buttons
+// Navigation menu list menu
 navigationMenusList.forEach((menu, index) => {
   if (index == 0) {
     menu.addEventListener("click", showEditAccountModal);
   } else if (index == 1) {
-    menu.addEventListener("click", logOut);
+    menu.addEventListener("click", logout);
   }
 });
-
-// Show navigation menu function
-function showMenus() {
-  navigationMenus.classList.toggle("show");
-}
-
-// ************Navigation menu functions************
 
 // Show edit account modal
 function showEditAccountModal() {
@@ -181,291 +150,263 @@ function editAccount() {
   addOpacityOnHeaderMainFooter();
 }
 
-// Logout function
-function logOut() {
+// Logout
+function logout() {
   navigationMenus.classList.remove("show");
-  console.log("Logout");
+  showLoader("Logging out...", "", "header");
 }
 
-// Dashboard menus buttons
-dashboardMenus.forEach((menu, index) => {
-  if (index == 0) {
-    menu.addEventListener("click", showcreateUserModal);
-  } else if (index == 1) {
-    menu.addEventListener("click", userList);
+// Show menu button
+showMenuButton.addEventListener("click", showMenus);
+
+//Show menu function
+function showMenus() {
+  menus.classList.toggle("show");
+}
+
+//Hide menu on click outside
+document.addEventListener("click", event => {
+  if (
+    event.target.closest("nav aside") ||
+    event.target.closest(".fa-caret-down")
+  ) {
+    return;
+  } else if (!event.target.closest("nav aside")) {
+    menus.classList.remove("show");
   }
 });
 
-// ************Dashboard main menu functions************
+// Hide navigation menu on pressing escape
+document.addEventListener("keyup", event => {
+  if (event.keyCode == 27) {
+    try {
+      menus.classList.remove("show");
+    } catch {}
+  }
+});
 
-// Show create user modal
-function showcreateUserModal() {
+// Dashboard menu buttons
+dahshBoardMenus.forEach((menu, index) => {
+  if (index == 0) {
+    menu.addEventListener("click", showAddItemModal);
+  } else if (index == 1) {
+    menu.addEventListener("click", listOfItems);
+  }
+});
+
+// Add item
+function showAddItemModal() {
   addOpacityOnHeaderMainFooter();
-  let createUserModal = document.createElement("section");
-  createUserModal.setAttribute("class", "modal-container");
-  createUserModal.innerHTML = `<div class="modal create-user">
+  let addItemModal = document.createElement("section");
+  addItemModal.setAttribute("class", "modal-container");
+  addItemModal.innerHTML = `
+  <div class="modal add-item">
   <div class="modal-content">
-
       <div class="close-button">
           <button onclick="closeModal()"><i class="fas fa-times-circle fa-2x"></i></button>
       </div>
 
-      <div class="create-user-container">
-          <div class="create-user-content">
-              <div class="create-user-title">
-                  <h1><i class="fas fa-user-plus"></i> Create User</h1>
+      <div class="add-item-container">
+          <div class="add-item-content">
+              <div class="add-item-title">
+                  <h1><i class="fas fa-box-open"></i> Add item</h1>
               </div>
 
-              <div class="create-user-input-fields">
-                  <label>Type Of User</label>
-                  <select>
-                      <option value="Super Admin">Super Admin</option>
-                      <option value="Admin">Admin</option>
-                      <option value="User">User</option>
+              <div class="add-item-input-fields-container">
+                  <div class="add-item-input-fields">
+                      <label>Code</label>
+                      <select>
+                          <option value="AFFE">AFFE </option>
+                          <option value="DRRM">DRRM</option>
+                          <option value="CONSHE">CONSHE</option>
+                          <option value="COME">COME</option>
+                          <option value="FF">FF</option>
+                          <option value="HOSE">HOSE</option>
+                          <option value="ITS">ITS</option>
+                          <option value="LB">LB</option>
+                          <option value="MV">MV</option>
+                          <option value="MSE">MSE</option>
+                          <option value="MACHINE">MACHINE</option>
+                          <option value="OEQ">OEQ</option>
+                          <option value="TSE">TSE</option>
+                          <option value="WC">WC</option>
+                      </select>
+                      <label>Date Of Purchase</label>
+                      <input type="date">
+                      <label>Article</label>
+                      <textarea></textarea>
+                      <label>Description</label>
+                      <textarea></textarea>
+                      <label>Property Number</label>
+                      <input type="text">
+                      <label>Unit of Measure</label>
+                      <select>
+                          <option value="pc">pc</option>
+                          <option value="set">set</option>
+                          <option value="pcs">pcs</option>
+                          <option value="unit">unit</option>
+                      </select>
+                      <label>Remarks</label>
+                      <select>
+                      <option value="Serviceable">Serviceable </option>
+                      <option value="Unserviceable/Missing">Unserviceable/Missing</option>
+                      <option value="Unserviceable">Unserviceable</option>
                   </select>
-                  <label>First Name</label>
-                  <input type="text">
-                  <label>Middle Name</label>
-                  <input type="text">
-                  <label>Last Name</label>
-                  <input type="text">
-                  <label>Sex</label>
-                  <select>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                  </select>
-                  <label>Birthday</label>
-                  <input type="date">
+                  </div>
               </div>
 
-              <div class="create-user-submit-button">
-                  <button onclick="createUser()">Submit</button>
+              <div class="add-item-submit-button">
+                  <button onclick="addItem()">Submit</button>
               </div>
           </div>
       </div>
   </div>
 </div>`;
-  body.insertBefore(createUserModal, header);
-  createUserModal.style.display = "flex";
+
+  {
+    // Office labels
+    /* <label>Office</label>
+<select>
+  <option value="ESMU">ESMU</option>
+    <option value="MAO">MAO</option>
+    <option value="MO">MO</option>
+    <option value="PIHC">PIHC</option>
+    <option value="MDRRM">MDRRM</option>
+    <option value="MDRRMO">MDRRMO</option>
+    <option value="ADMIN">ADMIN</option>
+    <option value="MHO">MHO</option>
+    <option value="MASSO">MASSO</option>
+    <option value="MBO">MBO</option>
+    <option value="MCR">MCR</option>
+    <option value="MTO">MTO</option>
+    <option value="PIO">PIO</option>
+    <option value="MSWDO">MSWDO</option>
+    <option value="SB">SB</option>
+    <option value="SB SEC">SB SEC</option>
+    <option value="TOURISM">TOURISM</option>
+    <option value="COA">COA</option> 
+    <option value="DILG">DILG</option>
+    <option value="GAD">GAD</option>
+    <option value="KALAHI">KALAHI</option>
+    <option value="LIBRARY">LIBRARY</option>
+    <option value="MPDC">MPDC</option>
+    <option value="MEO">MEO</option>
+    <option value="MTC">MTC</option>
+    <option value="PORT">PORT</option>
+    <option value="VICE MAYOR">VICE MAYOR</option>
+    <option value="OSCA">OSCA</option>
+    <option value="NCDC">NCDC</option>
+    <option value="COMELEC">COMELEC</option>
+    <option value="BAC">BAC</option>
+    <option value="BPLC">BPLC</option>
+    <option value="PESO">PESO</option>
+    <option value="MARKET">MARKET</option>
+    <option value="NCDC">NCDC</option>
+    <option value="SKHALL">SKHALL</option>
+</select> */
+  }
+  body.insertBefore(addItemModal, header);
+  addItemModal.style.display = "flex";
   addModalOpacity();
 }
 
-// Function for creating user
-function createUser() {
-  let sendDatas = true;
-  let Datas = new FormData();
-  let tableColumnTitles = [];
-  const inputWithLabel = {};
-  const selectWithLabel = {};
-  let mergeTwoFields = {};
+// Function for adding item
+function addItem() {
+  const addItemDatas = new FormData();
+  const addItem = true;
+  let numberOfErrors = 0;
+  const itemDatas = [];
+  let purchaseDateStatus;
 
-  let createUserDetailsTitles = document.querySelectorAll(
-    ".create-user-input-fields label"
+  const itemDatasSelect = document.querySelectorAll(
+    ".add-item-input-fields select"
   );
-  let createUserInputValues = document.querySelectorAll(
-    ".create-user-input-fields input"
+  const itemDatasInput = document.querySelectorAll(
+    ".add-item-input-fields input"
   );
-  let createUserSelectValues = document.querySelectorAll(
-    ".create-user-input-fields select"
+  const itemDatasTextArea = document.querySelectorAll(
+    ".add-item-input-fields textarea"
   );
 
-  // Function for validating create user infos
-  function validateCreateUserInfos() {
-    let numberOfNotEmpty = 0;
-    let validName = 0;
-    let status = false;
-    let birthdayStatus = true;
-
-    // Function for validating birthday
-    function validateBirthday(birthday) {
-      let date = new Date();
-      let year = date.getFullYear();
-      let birthdayKey = ["Year", "Month", "Day"];
-      let birthdayArray = birthday.split("-");
-      let birthdayMap = {};
-
-      birthdayArray.forEach((value, index) => {
-        birthdayMap[birthdayKey[index]] = value;
-      });
-
-      if (birthdayMap.Year <= 1800) {
-        birthdayStatus = false;
-      } else {
-        birthdayStatus = true;
-      }
-      return birthdayStatus;
-    }
-
-    createUserInputValues.forEach((input, index) => {
-      let label = input.previousElementSibling.innerHTML;
-      let regex = /\d/;
-      if (input.value == "") {
-        notification("error", `${label} is empty`);
-      } else {
-        numberOfNotEmpty++;
-      }
-
-      if (index <= 2) {
-        if (regex.test(input.value)) {
-          notification("error", `${label} is not valid`);
-        } else {
-          validName++;
-        }
-      }
-
-      if (index == createUserInputValues.length - 1) {
-        if (validateBirthday(input.value) == false) {
-          notification("error", `Invalid birthday`);
-        }
-      }
+  // Function for validating purchase date
+  function validatePurchaseDate(purchaseDate) {
+    let date = new Date();
+    let year = date.getFullYear();
+    let purchaseDateKey = ["Year", "Month", "Day"];
+    let purchaseDateArray = purchaseDate.split("-");
+    let purchaseDateMap = {};
+    purchaseDateArray.forEach((value, index) => {
+      purchaseDateMap[purchaseDateKey[index]] = value;
     });
 
-    if (
-      numberOfNotEmpty == createUserInputValues.length &&
-      birthdayStatus == true &&
-      validName == 3
-    ) {
-      status = true;
+    if (purchaseDateMap.Year <= 1800) {
+      purchaseDateStatus = false;
+    } else {
+      purchaseDateStatus = true;
     }
-
-    return status;
+    return purchaseDateStatus;
   }
 
-  // If validation returns true add users info to database
-  if (validateCreateUserInfos() == true) {
-    validateDuplicate();
+  itemDatasSelect.forEach((select, index) => {
+    const label = select.previousElementSibling.innerHTML;
+    itemDatas[label] = select.value;
+  });
 
-    function validateDuplicate() {
-      let getUserData = new FormData();
-      let getUser = true;
-      let inputUserFullName = "";
-      let getUserFullName = "";
-      getUserData.append("getUser", getUser);
-      var duplicateStatus = 0;
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/user-list.php");
-      xhr.onload = function() {
-        if (this.status == 200) {
-          let userList = JSON.parse(this.responseText);
-
-          createUserInputValues.forEach((input, index) => {
-            if (index < 3) {
-              inputUserFullName += input.value;
-            }
-          });
-
-          userList.forEach((user, index) => {
-            getUserFullName = `${user.first_name}${user.middle_name}${
-              user.last_name
-            }`;
-
-            if (
-              getUserFullName.replace(/\s/g, "").toLowerCase() ==
-              inputUserFullName.replace(/\s/g, "").toLowerCase()
-            ) {
-              setTimeout(() => {
-                notification("error", `Account already exist`);
-              }, 1);
-              duplicateStatus++;
-            }
-          });
-
-          if (duplicateStatus == 0) {
-            init();
-          }
-        }
-      };
-
-      xhr.send(getUserData);
+  itemDatasInput.forEach((input, index) => {
+    const label = input.previousElementSibling.innerHTML;
+    if (input.value == "") {
+      notification("error", `${label} is empty`);
+      numberOfErrors++;
+    } else {
+      itemDatas[label] = input.value;
     }
 
-    function init() {
-      showLoader("Creating User...", "", "User successfully created");
-      // Create the formdata variable name
-      createUserDetailsTitles.forEach((title, index) => {
-        tableColumnTitles[index] = title.innerHTML
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-      });
-      // Create the input field value
-      createUserInputValues.forEach((input, index) => {
-        let label = input.previousElementSibling.innerHTML;
-        let labelToArrayKey = label
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-        inputWithLabel[labelToArrayKey] =
-          index < 3
-            ? input.value.indexOf(" ") == -1
-              ? input.value.substring(0, 1).toUpperCase() +
-                input.value.substring(1, input.value.length)
-              : input.value
-                  .split(" ")
-                  .map(
-                    word =>
-                      `${word.substring(0, 1).toUpperCase()}${word.substring(
-                        1
-                      )}`
-                  )
-                  .join(" ")
-            : input.value;
-      });
-      // Create the select field value
-      createUserSelectValues.forEach((select, index) => {
-        let label = select.previousElementSibling.innerHTML;
-        let labelToArrayKey = label
-          .split(" ")
-          .map(
-            (word, index) =>
-              index > 0
-                ? word.substr(0, 1).toUpperCase() + word.substring(1)
-                : word.substr(0, 1).toLowerCase() + word.substring(1)
-          )
-          .join("");
-        selectWithLabel[labelToArrayKey] = select.value;
-      });
-      // Merge input with label and select with label
-      mergeTwoFields = { ...inputWithLabel, ...selectWithLabel };
-      // Append the data of user to Datas to send it to database
-      tableColumnTitles.forEach(title => {
-        Datas.append(title, mergeTwoFields[title]);
-      });
-      // Append the sendDatas to Datas to process adding to database
-      Datas.append("sendDatas", sendDatas);
-      // For debugging
-      // console.log(tableColumnTitles);
-      // console.log(inputWithLabel);
-      // console.log(selectWithLabel);
-      // console.log(mergeTwoFields);
-      // Output create user data
-      // for (var pair of Datas.entries()) {
-      //   console.log(pair[0] + ", " + pair[1]);
-      // }
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "../php/create-user.php", true);
-      xhr.onload = function() {
-        if (this.status == 200) {
-        }
-      };
-      xhr.send(Datas);
+    if (index == 0) {
+      if (validatePurchaseDate(input.value) == false) {
+        notification("error", `Invalid date of purchase`);
+      }
     }
+  });
+
+  itemDatasTextArea.forEach((textArea, index) => {
+    const label = textArea.previousElementSibling.innerHTML;
+    if (textArea.value == "") {
+      notification("error", `${label} is empty`);
+      numberOfErrors++;
+    } else {
+      itemDatas[label] =
+        textArea.value.substring(0, 1).toUpperCase() +
+        textArea.value.substring(1);
+    }
+  });
+
+  addItemDatas.append("addItem", addItem);
+
+  for (itemData in itemDatas) {
+    addItemDatas.append(
+      `${itemData.toLowerCase().replace(/\s/g, "")}`,
+      itemDatas[itemData]
+    );
+  }
+
+  // Send the item to database
+  if (numberOfErrors == 0 && purchaseDateStatus == true) {
+    showLoader("Adding item to database", "", "Item successfully added");
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "../php/add-item.php");
+    xhr.onload = function() {
+      if (this.status == 200) {
+      }
+    };
+
+    xhr.send(addItemDatas);
   }
 }
 
-// Function that redirects to user list page
-function userList() {
-  window.location.replace("user-list.html");
+// Redirect to item list page
+function listOfItems() {
+  window.location.replace("item-list.html");
 }
 
 // ************Utility functions for modal and submitting data************

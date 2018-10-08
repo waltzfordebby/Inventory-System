@@ -917,8 +917,8 @@ body .modal-container .modal.view-user .modal-content .view-user-container .view
   font-weight: bold;
 }
 body .modal-container .modal.add-item {
-  height: 33.5rem;
-  width: 70rem;
+  height: 38rem;
+  width: 35rem;
 }
 body .modal-container .modal.add-item .modal-content {
   display: grid;
@@ -1008,48 +1008,21 @@ body .modal-container .modal.add-item .modal-content .add-item-container .add-it
   text-align: left;
   font-weight: bold;
 }
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields {
-  grid-column: 2/4;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-row-gap: 0.7rem;
-}
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields label {
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields select {
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields textarea {
   padding: 0.4rem;
   font-size: 1.1rem;
-  border-radius: 0.3rem;
-  border: 2px solid #136f63;
-  outline: none;
-}
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields select:focus {
-  border: 2px solid #364156;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input {
-  padding: 0.4rem 0.5rem;
-  font-size: 1.1rem;
+  font-weight: bold;
   text-align: center;
   border-radius: 0.3rem;
   border: 2px solid #136f63;
   outline: none;
+  resize: none;
 }
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input:focus {
+body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields-container .add-item-input-fields textarea:focus {
   border: 2px solid #364156;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
-}
-body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-input-fields input[type=date] {
-  padding: 0.4rem 0.5rem;
-  font-size: 1.1rem;
-  text-align: left;
-  font-weight: bold;
 }
 body .modal-container .modal.add-item .modal-content .add-item-container .add-item-content .add-item-submit-button {
   grid-column: 2/4;

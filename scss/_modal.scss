@@ -548,8 +548,8 @@ body {
       }
 
       &.add-item {
-        height: 33.5rem;
-        width: 70rem;
+        height: 38rem;
+        width: 35rem;
 
         .modal-content {
           display: grid;
@@ -643,52 +643,22 @@ body {
                     text-align: left;
                     font-weight: bold;
                   }
-                }
-              }
 
-              .add-item-input-fields {
-                grid-column: 2/4;
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-row-gap: 0.7rem;
+                  textarea {
+                    padding: 0.4rem;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    text-align: center;
+                    border-radius: 0.3rem;
+                    border: 2px solid #136f63;
+                    outline: none;
+                    resize: none;
 
-                label {
-                  font-size: 1.1rem;
-                  font-weight: bold;
-                }
-
-                select {
-                  padding: 0.4rem;
-                  font-size: 1.1rem;
-                  border-radius: 0.3rem;
-                  border: 2px solid #136f63;
-                  outline: none;
-
-                  &:focus {
-                    border: 2px solid #364156;
-                    @include point-twenty-transition();
+                    &:focus {
+                      border: 2px solid #364156;
+                      @include point-twenty-transition();
+                    }
                   }
-                }
-
-                input {
-                  padding: 0.4rem 0.5rem;
-                  font-size: 1.1rem;
-                  text-align: center;
-                  border-radius: 0.3rem;
-                  border: 2px solid #136f63;
-                  outline: none;
-
-                  &:focus {
-                    border: 2px solid #364156;
-                    @include point-twenty-transition();
-                  }
-                }
-
-                input[type="date"] {
-                  padding: 0.4rem 0.5rem;
-                  font-size: 1.1rem;
-                  text-align: left;
-                  font-weight: bold;
                 }
               }
 

@@ -16,7 +16,7 @@
     <!-- Offline Fontawesome -->
     <link rel="stylesheet" type="text/css" href="../fonts/fontawesome-free-5.2.0-web/css/all.css">
     <!-- Page Title -->
-    <title>Inventory System | User Panel</title>
+    <title>Inventory System | Super Admin Panel</title>
 </head>
 
 <body>
@@ -31,12 +31,12 @@
                 <ul>
                     <!-- User name -->
                     <li title="Super admin">
-                        <i class="fas fa-user-alt fa-lg"></i>
+                        <i class="fas fa-user-astronaut fa-lg"></i>
                         <span>John Doe</span>
                     </li>
 
                     <!-- Menu button -->
-                    <li title="Click to view menus">
+                    <li title=" Click to view menus">
                         <i class="fas fa-caret-down"></i>
                     </li>
                 </ul>
@@ -49,6 +49,9 @@
                         <li>
                             <i class="fas fa-user-cog"></i>Edit Account</li>
                         <li>
+                            <i class="fas fa-box-open"></i>
+                            Add Item</li>
+                        <li>
                             <i class="fas fa-power-off"></i> Logout</li>
                     </ul>
                 </aside>
@@ -57,28 +60,49 @@
     </header>
 
     <!-- Main -->
-    <main class="dashboard">
+    <main class="default-container">
+        <section class="default-content">
+            <div class="table-title">
+                <h1>
+                    <span>
+                        <i class="fas fa-users"></i> List of Item(s)</span>
+                </h1>
+            </div>
+            <div class="table-search">
+                <input type="text">
+            </div>
+            <div class="table-container">
+                <table>
+                    <tbody>
 
-        <section class="dashboard-menus-container">
-            <div class="dashboard-menu">
-                <i class="fas fa-box-open"></i>
-                <h1>Add item</h1>
+                    </tbody>
+                </table>
+
+                <div class="table-notification">
+
+                </div>
             </div>
-            <div class="dashboard-menu">
-                <i class="fas fa-boxes"></i>
-                <h1>List of items</h1>
-            </div>
+            <!-- <div class="table-pagination">
+                <ul>
+                    <li tabindex="0">Prev</li>
+                    <li tabindex="0">1</li>
+                    <li tabindex="0">2</li>
+                    <li tabindex="0">3</li>
+                    <li tabindex="0">4</li>
+                    <li tabindex="0">5</li>
+                    <li tabindex="0">Next</li>
+                </ul>
+            </div> -->
         </section>
-
     </main>
 
     <!-- Footer -->
     <footer>
+
     </footer>
 
     <!-- Scripts -->
-    <script type="text/javascript" src="../js/user.js"></script>
+    <script type=" text/javascript " src=""></script>
+    <script type="text/javascript" src="../js/item-list.js"></script>
     <script type="text/javascript" src="../js/setting.js"></script>
 </body>
-
-</html>

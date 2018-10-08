@@ -190,7 +190,7 @@ function showPassword() {
 
 // Function for editing the account/change user data to database
 function editAccount() {
-  showLoader("Saving changes...", "Account successfully updated");
+  showLoader2("Saving changes...", "", "Account successfully updated");
   addOpacityOnHeaderMainFooter();
 }
 
@@ -366,7 +366,8 @@ function searchUser() {
 // ************Users table functionalities************
 
 // Insert the users to a table
-insertDataToTable();
+
+document.addEventListener("DOMContentLoaded", insertDataToTable);
 
 // Function for inserting users to table
 function insertDataToTable() {
@@ -779,6 +780,52 @@ function showLoader(
   init();
 }
 
+// Show loader 2
+function showLoader2(
+  startProcessTitle = "",
+  processName = "",
+  endProcessTitle = "",
+  outputAbove = ".modal-container"
+) {
+  let container = document.querySelector(outputAbove);
+  let loaderContainer = document.createElement("section");
+
+  // Function for calling spinning loader, removing spinning loader opacity and removing loader element
+  async function init() {
+    await addSpinningLoaderOpacity();
+    await removeSpinningLoaderOpacity();
+    await removeSpinningLoaderElement(processName, endProcessTitle);
+  }
+
+  loaderContainer.setAttribute("class", "spinning-loader-container");
+  loaderContainer.innerHTML = `<div class="spinning-loader-content">
+  <div class="lds-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+  <div class="loader-title">
+      <h1>${startProcessTitle}</h1>
+  </div>
+</div>
+  `;
+
+  body.insertBefore(loaderContainer, container);
+  loaderContainer.style.display = "flex";
+  closeModal();
+  addOpacityOnHeaderMainFooter();
+  init();
+}
+
 //Add opacity for spinning loader
 function addSpinningLoaderOpacity() {
   return new Promise((resolve, reject) => {
@@ -988,7 +1035,7 @@ function sendDataToDatabase(typeOfProcess, userId = "") {
                 getSex == sexInput
               ) {
                 setTimeout(() => {
-                  notification("error", `Account is up to date`);
+                  notification("error", `Account is updated`);
                 }, 1);
                 duplicateStatus++;
               }
@@ -1180,7 +1227,7 @@ function viewUserInfo(
                       <li><span>Time of creation:</span> ${timeOfCreation} </li>
                       <li><span>Date of creation:</span> ${dateOfCreation} </li>
                       <li><span>Username:</span>${username} </li>
-                      <li><span>Password:</span><span id="passwordContainer" onclick="showPassword('${rawPassword}')">View password</span></li>
+                      <li><span>Password:</span><span id="passwordContainer" onclick="showUserPassword('${rawPassword}')">View password</span></li>
                   </ul>
               </div>
 
@@ -1193,7 +1240,7 @@ function viewUserInfo(
   addModalOpacity();
 }
 
-function showPassword(rawPassword) {
+function showUserPassword(rawPassword) {
   let passwordContainer = document.querySelector("#passwordContainer");
   passwordContainer.style.fontWeight = "normal";
   passwordContainer.innerHTML = rawPassword;
