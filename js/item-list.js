@@ -399,7 +399,11 @@ function addItem() {
 
   // Send the item to database
   if (numberOfErrors == 0 && purchaseDateStatus == true) {
-    showLoader("Adding item to database", "", "Item successfully added");
+    showLoader(
+      "Adding item to database",
+      "add-item",
+      "Item successfully added"
+    );
 
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "../php/add-item.php");
@@ -410,6 +414,97 @@ function addItem() {
 
     xhr.send(addItemDatas);
   }
+}
+
+// ************Search table functionalities************
+
+// Toggle search icon on focus and focusout
+searchSection.addEventListener("focus", removeSearchIcon);
+searchSection.addEventListener("focusout", addSearchIcon);
+// searchSection.addEventListener("keyup", searchUser);
+
+// Function for removing search icon on search bar when clicked
+function removeSearchIcon() {
+  searchSection.style.background = "none";
+}
+
+// Function for adding search icon on search bar when not focused or search bar has no content
+function addSearchIcon() {
+  if (searchSection.value == "") {
+    searchSection.style.background =
+      "url(../images/icons8-search-filled-30.png) no-repeat center";
+  } else if (searchSection.value != "") {
+    searchSection.style.background = "none";
+  }
+}
+
+// Insert the items to a table
+document.addEventListener("DOMContentLoaded", insertItemsToTable);
+
+// Function for inserting item to table
+function insertItemsToTable() {
+  let notification = `<h1><i class="far fa-meh fa-3x"></i> Item list is empty</h1>`;
+  let getItems = true;
+  let getItemData = new FormData();
+  let tableHeader = `<tr>
+  <th>Code</th>
+  <th>Office</th>
+  <th>Article</th>
+  <th>Description</th>
+  <th>Edit</th>
+  <th>Delete</th>
+  `;
+  let tableData = "";
+  let tableContent = "";
+
+  getItemData.append("getItems", getItems);
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "../php/item-list.php");
+  xhr.onload = function() {
+    if (this.status == 200) {
+      let itemList = JSON.parse(this.responseText);
+      if (itemList != "") {
+        itemList.forEach((item, index) => {
+          let itemId = item.itemId;
+          let itemCode = item.code;
+          let itemOffice = item.office;
+          let itemDateOfPurchase = item.date_of_purchase;
+          let itemArticle = item.article;
+          let itemDescription = item.description;
+          let itemPropertyNumber = item.birthday;
+          let itemTimeOfCreation = item.time_of_creation;
+          let itemDateOfCreation = item.date_of_creation;
+          let itemUnitOfMeasure = item.unit_of_measure;
+          let itemRemarks = item.remarks;
+
+          if (itemOffice == "") {
+            var office = "Not released";
+          } else {
+            office = itemOffice;
+          }
+
+          tableData += `<tr>
+        <td>${itemCode}</td>
+        <td>${office}</td>
+        <td>${itemArticle}</td>
+        <td>${itemDescription}</td>
+        <td><i class="fas fa-user-edit"></i></td>
+        <td><i class="fas fa-trash"></i></td>
+        </tr>`;
+        });
+        tableContent = `${tableHeader}${tableData}`;
+        table.innerHTML = `${tableContent}`;
+        tableNotificationContainer.innerHTML = ``;
+      } else {
+        tableContent = `${tableHeader}`;
+        table.innerHTML = `${tableContent}`;
+        tableNotificationContainer.innerHTML = `${notification}`;
+      }
+    }
+  };
+
+  xhr.send(getItemData);
 }
 
 // ************Utility functions for modal and submitting data************
@@ -675,6 +770,8 @@ function removeSpinningLoaderElement(
       searchSection.value = "";
       addSearchIcon();
     }
+  } else if (processName == "add-item") {
+    insertItemsToTable();
   }
   removeOpacityOnHeaderMainFooter();
   return new Promise((resolve, reject) => {
